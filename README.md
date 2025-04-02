@@ -6,8 +6,7 @@
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Instalação](#instalação)
 - [Uso](#uso)
-- [Testes](#testes)
-- [Contribuição](#contribuição)
+
 - [Licença](#licença)
 
 ## Fluxo do GitHub
@@ -50,5 +49,5 @@ Para iniciar a aplicação, execute o arquivo `main.py`:
 ```
 A aplicação estará disponível em `http://localhost:8000`.
 
-### Licença 
+## Licença 
 Este projeto é licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
