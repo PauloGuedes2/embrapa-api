@@ -1,3 +1,7 @@
+## FLUXO DO GITHUB
+
+![img.png](img.png)
+
 ## Arquitetura do projeto: Hexagonal / Clean Architecture
 
 ```
