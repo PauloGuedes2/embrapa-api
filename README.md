@@ -1,8 +1,22 @@
-## FLUXO DO GITHUB
+# Embrapa API
 
-![img.png](img.png)
+## Índice
+- [Fluxo do GitHub](#fluxo-do-github)
+- [Arquitetura do Projeto](#arquitetura-do-projeto)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Instalação](#instalação)
+- [Uso](#uso)
+- [Testes](#testes)
+- [Contribuição](#contribuição)
+- [Licença](#licença)
 
-## Arquitetura do projeto: Hexagonal / Clean Architecture
+## Fluxo do GitHub
+![Fluxo do GitHub](img.png)
+
+## Arquitetura do Projeto
+O projeto segue a arquitetura Hexagonal / Clean Architecture.
+
+## Estrutura do Projeto
 
 ```
 /embrapa_api
@@ -23,3 +37,18 @@
 ├── main.py                      # Ponto de entrada
 ├── requirements.txt
 ```
+
+## Instalação
+Para instalar as dependências do projeto, execute:
+```bash
+    pip install -r requirements.txt
+```
+## Uso
+Para iniciar a aplicação, execute o arquivo `main.py`:
+```bash
+    python main.py
+```
+A aplicação estará disponível em `http://localhost:8000`.
+
+### Licença 
+Este projeto é licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
