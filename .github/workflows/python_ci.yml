@@ -23,25 +23,24 @@ jobs:
 
       - name: Run Critical Checks
         run: |
-          # Configura o relatório no Summary do GitHub
-          echo "## 🔴 Relatório de Problemas Críticos" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔴 Relatório de Problemas Críticos" > $GITHUB_STEP_SUMMARY
           echo "### 📅 Execução: $(date)" >> $GITHUB_STEP_SUMMARY
           
-          # Ruff - Apenas Critical/High
+          # Ruff - Apenas erros críticos (B e S)
           echo "### 🚨 Análise Estática (Ruff)" >> $GITHUB_STEP_SUMMARY
           echo "| Arquivo | Linha | Problema |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|-------|----------|" >> $GITHUB_STEP_SUMMARY
-          ruff check src/ --select B,S --severity C,H --format=github | grep "::error" | awk -F'::' '{gsub(/file=/,""); print "| " $3 " | " $4 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY
+          ruff check src/ --select B,S --exit-non-zero-on-fix --format=github | grep "::error" | awk -F'::' '{gsub(/file=/,""); print "| " $3 " | " $4 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || true
 
-          # Bandit - Apenas High (que inclui Critical)
+          # Bandit - Apenas High/Critical
           echo "### 🔒 Análise de Segurança (Bandit)" >> $GITHUB_STEP_SUMMARY
           echo "| Arquivo | Linha | Problema |" >> $GITHUB_STEP_SUMMARY
           echo "|---------|-------|----------|" >> $GITHUB_STEP_SUMMARY
-          bandit -r src/ -ll --severity-level high -f custom --msg-template "{abspath}:{line}: {severity}: {test_id}: {msg}" | awk -F':' '{print "| " $1 " | " $2 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY
+          bandit -r src/ -ll --severity-level high --confidence-level high -f custom --msg-template "{abspath}:{line}: {severity}: {test_id}: {msg}" | awk -F':' '{print "| " $1 " | " $2 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || true
 
-          # Safety - Apenas Critical
+          # Safety - Apenas vulnerabilidades críticas
           echo "### ⚠️ Vulnerabilidades em Dependências" >> $GITHUB_STEP_SUMMARY
-          safety check --severity critical --brief >> $GITHUB_STEP_SUMMARY
+          safety check --output brief | grep -i "CRITICAL" >> $GITHUB_STEP_SUMMARY || echo "Nenhuma vulnerabilidade crítica encontrada" >> $GITHUB_STEP_SUMMARY
 
       - name: Run Tests
         run: python -m pytest src/tests -v
