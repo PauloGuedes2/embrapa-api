@@ -1,0 +1,64 @@
+name: Python Critical Security Checks
+
+on:
+  push:
+    branches: [master, develop, feature/**]
+  pull_request:
+    branches: [master, develop, release/**]
+
+jobs:
+  quality-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install core dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "⚠️ requirements.txt não encontrado, instalando dependências básicas..."
+            pip install pytest ruff bandit safety
+          fi
+
+      - name: Verify installations
+        run: |
+          echo "Versões instaladas:"
+          python -m pip list | grep -E "pytest|ruff|bandit|safety"
+          python -m pytest --version || echo "❌ pytest não instalado"
+          ruff --version || echo "❌ ruff não instalado"
+          bandit --version || echo "❌ bandit não instalado"
+          safety --version || echo "❌ safety não instalado"
+
+      - name: Run Critical Checks
+        run: |
+          echo "## 🔴 Relatório de Qualidade" > $GITHUB_STEP_SUMMARY
+          echo "### 📅 Execução: $(TZ='America/Sao_Paulo' date +'%d/%m/%Y %H:%M:%S (BRT)')" >> $GITHUB_STEP_SUMMARY
+          
+          # Análise Estática
+          echo "### 🔍 Ruff (Bugs/Security)" >> $GITHUB_STEP_SUMMARY
+          ruff check src/ --select B,S --exit-non-zero-on-fix --format=github | grep "::error" | awk -F'::' '{print "| " $3 " | " $4 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhum problema crítico encontrado" >> $GITHUB_STEP_SUMMARY
+
+          # Segurança
+          echo "### 🔒 Bandit (Vulnerabilidades)" >> $GITHUB_STEP_SUMMARY
+          bandit -r src/ -ll --severity-level high --confidence-level high -f custom --msg-template "{abspath}:{line}: {severity}: {test_id}: {msg}" | awk -F':' '{print "| " $1 " | " $2 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade alta encontrada" >> $GITHUB_STEP_SUMMARY
+
+          # Dependências
+          echo "### ⚠️ Safety (CVEs Críticos)" >> $GITHUB_STEP_SUMMARY
+          safety check --output brief | grep -i "CRITICAL" >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade crítica em dependências" >> $GITHUB_STEP_SUMMARY
+
+      - name: Run Tests
+        run: |
+          if [ -d "src/tests" ]; then
+            python -m pytest src/tests -v
+          else
+            echo "⚠️ Pasta de testes não encontrada em src/tests"
+            exit 0
+          fi

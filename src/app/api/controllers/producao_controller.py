@@ -6,6 +6,7 @@ from domain.ports.producao_port import ProducaoInterface
 
 app = FastAPI()
 
+
 @app.get("/producao/{ano}")
 def get_producao(
     ano: int,
