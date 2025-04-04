@@ -40,7 +40,7 @@ jobs:
       - name: Run Critical Checks
         run: |
           echo "## 🔴 Relatório de Qualidade" > $GITHUB_STEP_SUMMARY
-          echo "### 📅 Execução: $(date +'%d/%m/%Y %H:%M:%S')" >> $GITHUB_STEP_SUMMARY
+          echo "### 📅 Execução: $(date -u +'%d/%m/%Y %H:%M:%S GMT')" >> $GITHUB_STEP_SUMMARY
           
           # Análise Estática
           echo "### 🔍 Ruff (Bugs/Security)" >> $GITHUB_STEP_SUMMARY
