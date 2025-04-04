@@ -8,6 +8,7 @@ class ProducaoInterface(ABC):
     @abstractmethod
     def buscar_producao(self, ano: int) -> List[ProducaoEntity]: ...
 
+
 class ProducaoRepository(ABC):
     @abstractmethod
     def salvar_producao(self, producao: List[ProducaoEntity]) -> None: ...

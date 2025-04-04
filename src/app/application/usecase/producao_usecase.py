@@ -1,5 +1,3 @@
-from typing import List
-
 from domain.entities.producao_entity import ProducaoEntity
 from domain.ports.producao_port import ProducaoInterface
 
