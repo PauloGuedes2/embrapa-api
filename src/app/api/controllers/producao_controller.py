@@ -1,18 +1,15 @@
-from fastapi import FastAPI, Depends
+from fastapi import APIRouter, Depends
 
-from api.dependencies.producao_dependencies import get_scraper
-from application.usecase.producao_usecase import ProducaoUseCase
-from domain.ports.producao_port import ProducaoInterface
+from src.app.api.dependencies.producao_dependencies import get_scraper
+from src.app.application.usecase.producao_usecase import ProducaoUseCase
+from src.app.domain.ports.producao_port import ProducaoInterface
 
-app = FastAPI()
+router = APIRouter()
 
-
-@app.get("/producao/{ano}")
+@router.get("/producao/{ano}")
 def get_producao(
     ano: int,
     scraper: ProducaoInterface = Depends(get_scraper),
-    # repository: IRepository = Depends(get_repository)
 ):
-    # use_case = ObterProducaoUseCase(scraper, repository)
     use_case = ProducaoUseCase(scraper)
     return use_case.execute(ano)

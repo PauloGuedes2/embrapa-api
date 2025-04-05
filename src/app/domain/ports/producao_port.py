@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from domain.entities.producao_entity import ProducaoEntity
+from src.app.domain.entities.producao_entity import ProducaoEntity
+
 
 
 class ProducaoInterface(ABC):
