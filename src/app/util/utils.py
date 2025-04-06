@@ -1,5 +1,7 @@
 from typing import Optional
 
+from exceptions.custom_exceptions import YearValidationError
+
 
 class Utils:
     @staticmethod
@@ -11,6 +13,6 @@ class Utils:
             raise ValueError("Year must be an integer.")
 
         if not 1970 <= year <= 2023:
-            raise ValueError("Year must be between 1970 and 2023.")
+            raise YearValidationError(year)
 
         return year
