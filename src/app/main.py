@@ -2,11 +2,18 @@ import logging
 import os
 
 import uvicorn
-from fastapi import Request
+from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
-
-from api.controllers.production_controller import app
 from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError
+from api.controllers.commercialization_controller import router as commercialization_router
+from api.controllers.production_controller import router as production_router
+
+app = FastAPI()
+
+# Register routers
+app.include_router(commercialization_router, prefix="/api", tags=["Commercialization"])
+app.include_router(production_router, prefix="/api", tags=["Production"])
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
