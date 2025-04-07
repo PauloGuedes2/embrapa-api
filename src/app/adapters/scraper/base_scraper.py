@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 import requests
+from domain.ports.export_port import ExportInterface, SubOption
+from domain.entities.export_entity import ExportEntity
 from bs4 import BeautifulSoup
 from exceptions.custom_exceptions import DataFetchError
 
@@ -19,6 +22,11 @@ class BaseScraper(ABC):
 class ProductionScraperBase(BaseScraper):
     @abstractmethod
     def fetch_production(self, year: int) -> list:
+        pass
+
+class ExportScraperBase(BaseScraper):
+    @abstractmethod
+    def fetch_export(self, year: Optional[int], suboption: SubOption) -> list[ExportEntity]:
         pass
 
 
