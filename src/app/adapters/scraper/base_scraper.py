@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
-
 import requests
 from bs4 import BeautifulSoup
-
 from exceptions.custom_exceptions import DataFetchError
 
 
@@ -17,6 +15,14 @@ class BaseScraper(ABC):
             raise DataFetchError(url)
         return BeautifulSoup(response.text, "html.parser")
 
+
+class ProductionScraperBase(BaseScraper):
     @abstractmethod
     def fetch_production(self, year: int) -> list:
+        pass
+
+
+class CommercializationScraperBase(BaseScraper):
+    @abstractmethod
+    def fetch_commercialization(self, year: int) -> list:
         pass
