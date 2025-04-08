@@ -1,5 +1,6 @@
 from abc import ABC
 from typing import Optional
+
 from adapters.scraper.base_scraper import CommercializationScraperBase
 from config.params import BASE_URL, YEAR_QUERY
 from domain.entities.commercialization_entity import CommercializationEntity
@@ -14,20 +15,15 @@ class CommercializationScraper(CommercializationScraperBase, CommercializationIn
     def fetch_commercialization(self, year: Optional[int]) -> list[CommercializationEntity]:
         year = Utils.validate_year(year)
         url = self._build_url(self.base_url, year)
-
-        print(f"URL: {url}")
         soup = self.fetch_data(url)
 
-        table = soup.find("table", {"class": "tb_base tb_dados"})
-        commercializations = []
+        table_data = Utils.extract_generic_table_data(
+            soup=soup,
+            table_class="tb_base tb_dados",
+            skip_rows=1
+        )
 
-        for row in table.find_all("tr")[1:]:
-            cols = row.find_all("td")
-            product = cols[0].text.strip()
-            quantity = cols[1].text.strip()
-            commercializations.append(CommercializationEntity(product, quantity))
-
-        return commercializations
+        return [CommercializationEntity(product=row[0], quantity=row[1]) for row in table_data]
 
     @staticmethod
     def _build_url(base_url: str, year: Optional[int] = None) -> str:
