@@ -1,8 +1,11 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup
 
+from domain.entities.export_entity import ExportEntity
+from domain.ports.export_port import SubOption
 from exceptions.custom_exceptions import DataFetchError
 
 
@@ -17,6 +20,19 @@ class BaseScraper(ABC):
             raise DataFetchError(url)
         return BeautifulSoup(response.text, "html.parser")
 
+
+class ProductionScraperBase(BaseScraper):
     @abstractmethod
     def fetch_production(self, year: int) -> list:
+        pass
+
+class ExportScraperBase(BaseScraper):
+    @abstractmethod
+    def fetch_export(self, year: Optional[int], suboption: SubOption) -> list[ExportEntity]:
+        pass
+
+
+class CommercializationScraperBase(BaseScraper):
+    @abstractmethod
+    def fetch_commercialization(self, year: int) -> list:
         pass
