@@ -1,10 +1,12 @@
 from abc import ABC
 from typing import Optional
+
 from adapters.scraper.base_scraper import ExportScraperBase
-from config.params import BASE_URL, YEAR_QUERY
+from config.params import BASE_URL
 from domain.entities.export_entity import ExportEntity
 from domain.ports.export_port import ExportInterface, SubOption
 from util.utils import Utils
+
 
 class ExportScraper(ExportScraperBase, ExportInterface, ABC):
     def __init__(self):

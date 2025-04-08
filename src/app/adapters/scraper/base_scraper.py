@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Optional
+
 import requests
-from domain.ports.export_port import ExportInterface, SubOption
-from domain.entities.export_entity import ExportEntity
 from bs4 import BeautifulSoup
+
+from domain.entities.export_entity import ExportEntity
+from domain.ports.export_port import SubOption
 from exceptions.custom_exceptions import DataFetchError
 
 

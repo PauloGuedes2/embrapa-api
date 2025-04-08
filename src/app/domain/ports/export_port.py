@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
 from enum import Enum
+from typing import List, Optional
 
 from domain.entities.export_entity import ExportEntity
 
