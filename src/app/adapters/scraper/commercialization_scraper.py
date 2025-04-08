@@ -1,18 +1,18 @@
 from abc import ABC
 from typing import Optional
 
-from adapters.scraper.base_scraper import ProductionScraperBase
+from adapters.scraper.base_scraper import CommercializationScraperBase
 from config.params import BASE_URL, YEAR_QUERY
-from domain.entities.production_entity import ProductionEntity
-from domain.ports.production_port import ProductionInterface
+from domain.entities.commercialization_entity import CommercializationEntity
+from domain.ports.commercialization_port import CommercializationInterface
 from util.utils import Utils
 
 
-class ProductionScraper(ProductionScraperBase, ProductionInterface, ABC):
+class CommercializationScraper(CommercializationScraperBase, CommercializationInterface, ABC):
     def __init__(self):
-        super().__init__(f"{BASE_URL}?opcao=opt_02")
+        super().__init__(f"{BASE_URL}?opcao=opt_04")
 
-    def fetch_production(self, year: Optional[int]) -> list[ProductionEntity]:
+    def fetch_commercialization(self, year: Optional[int]) -> list[CommercializationEntity]:
         year = Utils.validate_year(year)
         url = self._build_url(self.base_url, year)
         soup = self.fetch_data(url)
@@ -23,7 +23,7 @@ class ProductionScraper(ProductionScraperBase, ProductionInterface, ABC):
             skip_rows=1
         )
 
-        return [ProductionEntity(product=row[0], quantity=row[1]) for row in table_data]
+        return [CommercializationEntity(product=row[0], quantity=row[1]) for row in table_data]
 
     @staticmethod
     def _build_url(base_url: str, year: Optional[int] = None) -> str:
