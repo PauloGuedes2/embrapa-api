@@ -12,7 +12,7 @@ class ProductionScraper(ProductionScraperBase, ProductionInterface, ABC):
     def __init__(self):
         super().__init__(f"{BASE_URL}?opcao=opt_02")
 
-    def fetch_data_for_year(self, year: Optional[int]) -> list[ProductionEntity]:
+    def fetch_production(self, year: Optional[int]) -> list[ProductionEntity]:
         year = Utils.validate_year(year)
         url = self._build_url(self.base_url, year)
         soup = self.fetch_data(url)
