@@ -1,5 +1,6 @@
 from abc import ABC
 from typing import Optional
+
 from adapters.scraper.base_scraper import ProductionScraperBase
 from config.params import BASE_URL, YEAR_QUERY
 from domain.entities.production_entity import ProductionEntity
@@ -11,23 +12,18 @@ class ProductionScraper(ProductionScraperBase, ProductionInterface, ABC):
     def __init__(self):
         super().__init__(f"{BASE_URL}?opcao=opt_02")
 
-    def fetch_production(self, year: Optional[int]) -> list[ProductionEntity]:
+    def fetch_data_for_year(self, year: Optional[int]) -> list[ProductionEntity]:
         year = Utils.validate_year(year)
         url = self._build_url(self.base_url, year)
-
-        print(f"URL: {url}")
         soup = self.fetch_data(url)
 
-        table = soup.find("table", {"class": "tb_base tb_dados"})
-        productions = []
+        table_data = Utils.extract_generic_table_data(
+            soup=soup,
+            table_class="tb_base tb_dados",
+            skip_rows=1
+        )
 
-        for row in table.find_all("tr")[1:]:
-            cols = row.find_all("td")
-            product = cols[0].text.strip()
-            quantity = cols[1].text.strip()
-            productions.append(ProductionEntity(product, quantity))
-
-        return productions
+        return [ProductionEntity(product=row[0], quantity=row[1]) for row in table_data]
 
     @staticmethod
     def _build_url(base_url: str, year: Optional[int] = None) -> str:
