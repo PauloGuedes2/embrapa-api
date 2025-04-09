@@ -4,8 +4,11 @@ from typing import Optional
 import requests
 from bs4 import BeautifulSoup
 
+from domain.entities.commercialization_entity import CommercializationEntity
 from domain.entities.export_entity import ExportEntity
-from domain.ports.export_port import SubOption
+from domain.entities.import_entity import ImportEntity
+from domain.entities.production_entity import ProductionEntity
+from domain.enum.enums import ExportSubOption, ImportSubOption
 from exceptions.custom_exceptions import DataFetchError
 
 
@@ -23,16 +26,23 @@ class BaseScraper(ABC):
 
 class ProductionScraperBase(BaseScraper):
     @abstractmethod
-    def fetch_production(self, year: int) -> list:
-        pass
-
-class ExportScraperBase(BaseScraper):
-    @abstractmethod
-    def fetch_export(self, year: Optional[int], suboption: SubOption) -> list[ExportEntity]:
+    def fetch_production(self, year: Optional[int]) -> list[ProductionEntity]:
         pass
 
 
 class CommercializationScraperBase(BaseScraper):
     @abstractmethod
-    def fetch_commercialization(self, year: int) -> list:
+    def fetch_commercialization(self, year: Optional[int]) -> list[CommercializationEntity]:
+        pass
+
+
+class ImportScraperBase(BaseScraper):
+    @abstractmethod
+    def fetch_import(self, year: Optional[int], sub_option: Optional[ImportSubOption]) -> list[ImportEntity]:
+        pass
+
+
+class ExportScraperBase(BaseScraper):
+    @abstractmethod
+    def fetch_export(self, year: Optional[int], sub_option: Optional[ExportSubOption]) -> list[ExportEntity]:
         pass
