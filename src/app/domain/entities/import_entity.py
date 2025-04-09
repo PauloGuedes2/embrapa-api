@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class ExportEntity:
+class ImportEntity:
     country: str
     quantity: str
     value: str

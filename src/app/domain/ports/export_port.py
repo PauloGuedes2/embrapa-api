@@ -1,17 +1,10 @@
 from abc import ABC, abstractmethod
-from enum import Enum
 from typing import List, Optional
 
 from domain.entities.export_entity import ExportEntity
+from domain.enum.enums import ExportSubOption
 
 
 class ExportInterface(ABC):
     @abstractmethod
-    def fetch_export(self, year: Optional[int]) -> List[ExportEntity]: ...
-
-
-class SubOption(str, Enum):
-    subopt_01 = "Vinhos de mesa"
-    subopt_02 = "Espumantes"
-    subopt_03 = "Uvas frescas"
-    subopt_04 = "Suco de uva"
+    def fetch_export(self, year: Optional[int], sub_option: Optional[ExportSubOption]) -> List[ExportEntity]: ...
