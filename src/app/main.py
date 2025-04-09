@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 
 from api.controllers.commercialization_controller import router as commercialization_router
 from api.controllers.export_controller import router as export_router
+from api.controllers.import_controller import router as import_router
 from api.controllers.production_controller import router as production_router
 from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError
 
@@ -15,10 +16,12 @@ app = FastAPI()
 # Register routers
 app.include_router(commercialization_router, prefix="/api", tags=["Commercialization"])
 app.include_router(production_router, prefix="/api", tags=["Production"])
+app.include_router(import_router, prefix="/api", tags=["Import"])
 app.include_router(export_router, prefix="/api", tags=["Export"])
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 @app.exception_handler(YearValidationError)
 async def year_validation_exception_handler(request: Request, exc: YearValidationError):
