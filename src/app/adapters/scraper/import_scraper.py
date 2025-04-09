@@ -25,6 +25,4 @@ class ImportScraper(ImportScraperBase, ImportInterface, ABC):
             skip_rows=1
         )
 
-        print (f"URL: {url}", f"Table Data: {table_data}")
-
         return [ImportEntity(country=row[0], quantity=row[1], value=row[2]) for row in table_data]
