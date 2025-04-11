@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from src.app.domain.entities.user_entity import User
-
+from domain.entities.user_entity import User
+ 
 class UserRepository:
     def __init__(self, db: Session):
         self.db = db

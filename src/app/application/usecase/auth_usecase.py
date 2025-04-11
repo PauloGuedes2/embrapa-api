@@ -1,5 +1,5 @@
-from src.app.adapters.repository.user_repository import UserRepository
-from src.app.adapters.security.jwt_service import verify_password, create_access_token
+from adapters.repository.user_repository import UserRepository
+from adapters.security.jwt_service import verify_password, create_access_token
 
 class AuthUseCase:
     def __init__(self, user_repo: UserRepository):

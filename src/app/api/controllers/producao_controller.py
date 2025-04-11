@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from src.app.api.dependencies.producao_dependencies import get_scraper
-from src.app.application.usecase.producao_usecase import ProducaoUseCase
-from src.app.domain.ports.producao_port import ProducaoInterface
+from api.dependencies.producao_dependencies import get_scraper
+from application.usecase.producao_usecase import ProducaoUseCase
+from domain.ports.producao_port import ProducaoInterface
 
 router = APIRouter()
 

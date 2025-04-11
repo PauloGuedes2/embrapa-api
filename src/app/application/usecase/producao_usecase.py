@@ -1,5 +1,5 @@
-from src.app.domain.entities.producao_entity import ProducaoEntity
-from src.app.domain.ports.producao_port import ProducaoInterface
+from domain.entities.producao_entity import ProducaoEntity
+from domain.ports.producao_port import ProducaoInterface
 
 
 

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.app.api.controllers import auth_controller, producao_controller
+from api.controllers import auth_controller, producao_controller
 
 app = FastAPI()
 
