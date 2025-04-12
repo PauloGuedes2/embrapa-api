@@ -28,17 +28,18 @@ jobs:
             pip install -r requirements.txt
           else
             echo "⚠️ requirements.txt não encontrado, instalando dependências básicas..."
-            pip install pytest ruff bandit safety coverage
+            pip install pytest ruff bandit safety coverage 
           fi
 
       - name: Verify installations
         run: |
           echo "Versões instaladas:"
-          python -m pip list | grep -E "pytest|ruff|bandit|safety"
+          python -m pip list | grep -E "pytest|ruff|bandit|safety|coverage" 
           python -m pytest --version || echo "❌ pytest não instalado"
           ruff --version || echo "❌ ruff não instalado"
           bandit --version || echo "❌ bandit não instalado"
           safety --version || echo "❌ safety não instalado"
+          coverage --version || echo "❌ coverage não instalado"
 
       - name: Run Critical Checks
         run: |
@@ -62,7 +63,7 @@ jobs:
           if [ -d "src/tests" ]; then
             echo "### ✅ Resultados dos Testes" >> $GITHUB_STEP_SUMMARY
 
-            coverage run -m pytest src/tests -v --fail-fast | tee result.log
+            coverage run -m pytest src/tests -v
             echo '```' >> $GITHUB_STEP_SUMMARY
             cat result.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
@@ -72,7 +73,6 @@ jobs:
             echo '|---------|-----------|' >> $GITHUB_STEP_SUMMARY
             coverage report --omit="*/tests/*,*/__init__.py" | tail -n +3 | grep -v "TOTAL" | awk '{printf("| `%s` | %s |\n", $1, $4)}' >> $GITHUB_STEP_SUMMARY
 
-            # Geração do HTML (sem salvar no repo)
             coverage html -d coverage_html
           else
             echo "⚠️ Pasta de testes não encontrada em src/tests"
