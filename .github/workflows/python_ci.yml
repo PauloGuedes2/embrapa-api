@@ -33,7 +33,7 @@ jobs:
 
       - name: Verify installations
         run: |
-          echo "Versões instaladas:"
+          echo "📜 **Versões instaladas:**"
           python -m pip list | grep -E "pytest|ruff|bandit|safety|coverage"
           python -m pytest --version || echo "❌ pytest não instalado"
           ruff --version || echo "❌ ruff não instalado"
@@ -43,36 +43,36 @@ jobs:
 
       - name: Run Critical Checks
         run: |
-          echo "## 🔴 Relatório de Qualidade" > $GITHUB_STEP_SUMMARY
-          echo "### 📅 Execução: $(TZ='America/Sao_Paulo' date +'%d/%m/%Y %H:%M:%S (BRT)')" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔴 **Relatório de Qualidade**" > $GITHUB_STEP_SUMMARY
+          echo "📅 **Execução:** $(TZ='America/Sao_Paulo' date +'%d/%m/%Y %H:%M:%S (BRT)')" >> $GITHUB_STEP_SUMMARY
           
-          echo "### 🔍 Ruff (Bugs/Security)" >> $GITHUB_STEP_SUMMARY
-          ruff check src/ --select B,S --exit-non-zero-on-fix --format=github | grep "::error" | awk -F'::' '{print "| " $3 " | " $4 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhum problema crítico encontrado" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔍 **Ruff (Bugs/Security)**" >> $GITHUB_STEP_SUMMARY
+          ruff check src/ --select B,S --exit-non-zero-on-fix --format=github | grep "::error" | awk -F'::' '{print "| " $3 " | " $4 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhum problema crítico encontrado." >> $GITHUB_STEP_SUMMARY
 
-          echo "### 🔒 Bandit (Vulnerabilidades)" >> $GITHUB_STEP_SUMMARY
-          bandit -r src/ -ll --severity-level high --confidence-level high -f custom --msg-template "{abspath}:{line}: {severity}: {test_id}: {msg}" | awk -F':' '{print "| " $1 " | " $2 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade alta encontrada" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔒 **Bandit (Vulnerabilidades)**" >> $GITHUB_STEP_SUMMARY
+          bandit -r src/ -ll --severity-level high --confidence-level high -f custom --msg-template "{abspath}:{line}: {severity}: {test_id}: {msg}" | awk -F':' '{print "| " $1 " | " $2 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade alta encontrada." >> $GITHUB_STEP_SUMMARY
 
-          echo "### ⚠️ Safety (CVEs Críticos)" >> $GITHUB_STEP_SUMMARY
-          safety check --output brief | grep -i "CRITICAL" >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade crítica em dependências" >> $GITHUB_STEP_SUMMARY
+          echo "### ⚠️ **Safety (CVEs Críticos)**" >> $GITHUB_STEP_SUMMARY
+          safety check --output brief | grep -i "CRITICAL" >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade crítica em dependências." >> $GITHUB_STEP_SUMMARY
 
       - name: Run Tests with Coverage
         run: |
           if [ -d "src/tests" ]; then
-            echo "### ✅ Resultados dos Testes" >> $GITHUB_STEP_SUMMARY
+            echo "### ✅ **Resultados dos Testes**" >> $GITHUB_STEP_SUMMARY
             coverage run -m pytest src/tests -v > result.log
 
             echo '```' >> $GITHUB_STEP_SUMMARY
-            cat result.log >> $GITHUB_STEP_SUMMARY
+            tail -n 10 result.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
 
-            echo "### 🧪 Cobertura de Testes" >> $GITHUB_STEP_SUMMARY
-            echo '| Arquivo | Cobertura |' >> $GITHUB_STEP_SUMMARY
-            echo '|---------|-----------|' >> $GITHUB_STEP_SUMMARY
+            echo "### 🧪 **Cobertura de Testes**" >> $GITHUB_STEP_SUMMARY
+            echo '| **Arquivo** | **Cobertura** |' >> $GITHUB_STEP_SUMMARY
+            echo '|-------------|---------------|' >> $GITHUB_STEP_SUMMARY
             coverage report --omit="*/tests/*,*/__init__.py" | tail -n +3 | grep -v "TOTAL" | awk '{printf("| `%s` | %s |\n", $1, $4)}' >> $GITHUB_STEP_SUMMARY
 
             coverage html -d coverage_html
           else
-            echo "⚠️ Pasta de testes não encontrada em src/tests"
+            echo "⚠️ **Pasta de testes não encontrada em src/tests.**"
             exit 0
           fi
 
@@ -85,4 +85,4 @@ jobs:
 
       - name: Link para HTML no Step Summary
         run: |
-          echo "🔗 [Abrir Relatório de Cobertura HTML (via Artifact)](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [**Abrir Relatório de Cobertura HTML (via Artifact)**](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
