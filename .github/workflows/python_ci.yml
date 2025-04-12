@@ -28,7 +28,7 @@ jobs:
             pip install -r requirements.txt
           else
             echo "⚠️ requirements.txt não encontrado, instalando dependências básicas..."
-            pip install pytest ruff bandit safety coverage 
+            pip install pytest ruff bandit safety coverage
           fi
 
       - name: Verify installations
@@ -63,7 +63,8 @@ jobs:
           if [ -d "src/tests" ]; then
             echo "### ✅ Resultados dos Testes" >> $GITHUB_STEP_SUMMARY
 
-            coverage run -m pytest src/tests -v
+            coverage run -m pytest src/tests -v > result.log
+
             echo '```' >> $GITHUB_STEP_SUMMARY
             cat result.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
