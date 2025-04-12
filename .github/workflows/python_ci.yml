@@ -62,7 +62,7 @@ jobs:
             coverage run -m pytest src/tests -v > result.log
 
             echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -n 2 result.log >> $GITHUB_STEP_SUMMARY
+            tail -n 5 result.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
 
             echo "### 🧪 **Cobertura de Testes**" >> $GITHUB_STEP_SUMMARY
