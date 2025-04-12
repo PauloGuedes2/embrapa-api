@@ -2,7 +2,7 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from src.app.adapter.scraper.commercialization_scraper import CommercializationScraper
+from adapter.scraper.commercialization_scraper import CommercializationScraper
 
 
 class TestCommercializationScraper:

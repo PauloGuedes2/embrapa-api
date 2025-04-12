@@ -2,8 +2,8 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from src.app.adapter.scraper.import_scraper import ImportScraper
-from src.app.domain.enum.enums import ImportSubOption
+from adapter.scraper.import_scraper import ImportScraper
+from domain.enum.enums import ImportSubOption
 
 HTTP_FAKE = "http://fakeurl.com"
 

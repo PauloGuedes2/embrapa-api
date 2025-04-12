@@ -2,7 +2,7 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from src.app.adapter.scraper.production_scraper import ProductionScraper
+from adapter.scraper.production_scraper import ProductionScraper
 
 HTTP_FAKE = "http://fakeurl.com"
 

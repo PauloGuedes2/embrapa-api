@@ -19,7 +19,7 @@ jobs:
           python-version: "3.11"
 
       - name: Configure PYTHONPATH
-        run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
+        run: echo "PYTHONPATH=$(pwd)/src/app" >> $GITHUB_ENV
 
       - name: Install core dependencies
         run: |

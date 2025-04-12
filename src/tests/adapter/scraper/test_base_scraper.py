@@ -2,7 +2,7 @@ from unittest.mock import patch, MagicMock
 
 from bs4 import BeautifulSoup
 
-from src.app.adapter.scraper.base_scraper import BaseScraper
+from adapter.scraper.base_scraper import BaseScraper
 
 HTTP_FAKE = "http://fakeurl.com"
 
