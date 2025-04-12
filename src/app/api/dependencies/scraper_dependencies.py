@@ -1,11 +1,11 @@
+from adapter.scraper.commercialization_scraper import CommercializationScraper
 from adapter.scraper.export_scraper import ExportScraper
 from adapter.scraper.import_scraper import ImportScraper
 from adapter.scraper.production_scraper import ProductionScraper
-from adapter.scraper.commercialization_scraper import CommercializationScraper
+from domain.ports.commercialization_port import CommercializationInterface
 from domain.ports.export_port import ExportInterface
 from domain.ports.import_port import ImportInterface
 from domain.ports.production_port import ProductionInterface
-from domain.ports.commercialization_port import CommercializationInterface
 
 
 class ScraperDependencies:

@@ -1,6 +1,8 @@
-import pytest
 from unittest.mock import patch, MagicMock
+
+import pytest
 from bs4 import BeautifulSoup
+
 from exceptions.custom_exceptions import DataFetchError
 from src.app.adapter.scraper.base_scraper import BaseScraper
 
