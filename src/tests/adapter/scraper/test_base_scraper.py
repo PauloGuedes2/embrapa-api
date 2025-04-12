@@ -1,10 +1,6 @@
-import os
-import sys
 from unittest.mock import patch, MagicMock
 
 from bs4 import BeautifulSoup
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
 
 from src.app.adapter.scraper.base_scraper import BaseScraper
 

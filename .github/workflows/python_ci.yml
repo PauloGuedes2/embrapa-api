@@ -60,7 +60,7 @@ jobs:
       - name: Run Tests
         run: |
           if [ -d "src/tests" ]; then
-            python -m pytest src/tests -v
+            pytest -v
           else
             echo "⚠️ Pasta de testes não encontrada em src/tests"
             exit 0
