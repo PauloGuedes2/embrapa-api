@@ -57,11 +57,35 @@ jobs:
           echo "### ⚠️ Safety (CVEs Críticos)" >> $GITHUB_STEP_SUMMARY
           safety check --output brief | grep -i "CRITICAL" >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade crítica em dependências" >> $GITHUB_STEP_SUMMARY
 
-      - name: Run Tests
+      - name: Run Tests with Coverage
         run: |
           if [ -d "src/tests" ]; then
-            pytest -v
+            echo "### ✅ Resultados dos Testes" >> $GITHUB_STEP_SUMMARY
+
+            coverage run -m pytest src/tests -v | tee result.log
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat result.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+
+            echo "### 🧪 Cobertura de Testes" >> $GITHUB_STEP_SUMMARY
+            echo '| Arquivo | Cobertura |' >> $GITHUB_STEP_SUMMARY
+            echo '|---------|-----------|' >> $GITHUB_STEP_SUMMARY
+            coverage report --omit="*/tests/*,*/__init__.py" | tail -n +3 | grep -v "TOTAL" | awk '{printf("| `%s` | %s |\n", $1, $4)}' >> $GITHUB_STEP_SUMMARY
+
+            # Geração do HTML (sem salvar no repo)
+            coverage html -d coverage_html
+
           else
             echo "⚠️ Pasta de testes não encontrada em src/tests"
             exit 0
-          fi
+
+      - name: Upload Coverage HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage_html/
+          retention-days: 7
+
+      - name: Link para HTML no Step Summary
+        run: |
+          echo "🔗 [Abrir Relatório de Cobertura HTML (via Artifact)](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
