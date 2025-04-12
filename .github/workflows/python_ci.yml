@@ -59,11 +59,14 @@ jobs:
         run: |
           if [ -d "src/tests" ]; then
             echo "### ✅ **Resultados dos Testes**" >> $GITHUB_STEP_SUMMARY
-            coverage run -m pytest src/tests -v > result.log
-
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -n 10 result.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
+            pytest src/tests --maxfail=1 --disable-warnings --tb=short > result.log || echo "❌ Um ou mais testes falharam!" >> $GITHUB_STEP_SUMMARY
+            
+            if grep -q "FAILED" result.log; then
+              echo "⚠️ **Testes que falharam:**" >> $GITHUB_STEP_SUMMARY
+              grep "FAILED" result.log | awk '{print "- **" $1 "**: " $0}' >> $GITHUB_STEP_SUMMARY
+            else
+              echo "✅ Todos os testes passaram!" >> $GITHUB_STEP_SUMMARY
+            fi
 
             echo "### 🧪 **Cobertura de Testes**" >> $GITHUB_STEP_SUMMARY
             echo '| **Arquivo** | **Cobertura** |' >> $GITHUB_STEP_SUMMARY
