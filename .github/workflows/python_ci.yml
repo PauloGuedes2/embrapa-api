@@ -1,4 +1,4 @@
-name: Python Critical Security Checks
+name: 🛡️ Python Critical Security Checks
 
 on:
   push:
@@ -10,15 +10,15 @@ jobs:
   quality-checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: ⬇️ Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
-      - name: Cache dependencies
+      - name: 💾 Cache pip dependencies
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
@@ -26,44 +26,45 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Configure PYTHONPATH
+      - name: ⚙️ Configure PYTHONPATH
         run: echo "PYTHONPATH=$(pwd)/src/app" >> $GITHUB_ENV
 
-      - name: Install core dependencies
+      - name: 📦 Install core dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           else
-            echo "⚠️ requirements.txt não encontrado, instalando dependências básicas..."
+            echo "⚠️ Arquivo requirements.txt não encontrado, instalando dependências padrão..."
             pip install pytest ruff bandit safety coverage
           fi
 
-      - name: Verify installations
+      - name: 🔍 Verify installations
         run: |
-          echo "📜 **Versões instaladas:**"
+          echo "📦 **Pacotes instalados:**"
           python -m pip list | grep -E "pytest|ruff|bandit|safety|coverage"
+          echo ""
           python -m pytest --version || echo "❌ pytest não instalado"
           ruff --version || echo "❌ ruff não instalado"
           bandit --version || echo "❌ bandit não instalado"
           safety --version || echo "❌ safety não instalado"
           coverage --version || echo "❌ coverage não instalado"
 
-      - name: Run Critical Checks
+      - name: 🚨 Run Critical Checks
         run: |
-          echo "## 🔴 **Relatório de Qualidade**" > $GITHUB_STEP_SUMMARY
-          echo "📅 **Execução:** $(TZ='America/Sao_Paulo' date +'%d/%m/%Y %H:%M:%S (BRT)')" >> $GITHUB_STEP_SUMMARY
+          echo "# 🧪 Relatório de Qualidade de Código" > $GITHUB_STEP_SUMMARY
+          echo "📅 Execução: $(TZ='America/Sao_Paulo' date +'%d/%m/%Y %H:%M:%S (BRT)')" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
 
-          RUFF_STATUS="🟢 OK"
-          BANDIT_STATUS="🟢 OK"
-          SAFETY_STATUS="🟢 OK"
-          TESTS_STATUS="🟢 OK"
+          RUFF_STATUS="✅ Nenhum problema"
+          BANDIT_STATUS="✅ Nenhuma vulnerabilidade"
+          SAFETY_STATUS="✅ Sem CVEs críticos"
+          TESTS_STATUS="✅ Todos passaram"
 
-          echo "### 🔍 Ruff (Bugs/Security)" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 Ruff (bugs e segurança)" >> $GITHUB_STEP_SUMMARY
           ruff check src/ --select B,S --format=github > ruff_output.log || true
           if grep "::error" ruff_output.log > /dev/null; then
-            RUFF_STATUS="🔴 Problemas encontrados"
+            RUFF_STATUS="❌ Problemas encontrados"
             echo '| Arquivo | Linha | Código | Descrição |' >> $GITHUB_STEP_SUMMARY
             echo '|---------|-------|--------|-----------|' >> $GITHUB_STEP_SUMMARY
             grep "::error" ruff_output.log | awk -F'::' '{split($3, loc, ":"); print "| " loc[1] " | " loc[2] " | " $4 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY
@@ -72,83 +73,82 @@ jobs:
           fi
 
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "### 🔒 Bandit (Vulnerabilidades)" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔐 Bandit (vulnerabilidades de código)" >> $GITHUB_STEP_SUMMARY
           bandit -r src/ -ll --severity-level high --confidence-level high -f custom \
             --msg-template "{abspath}:{line}: {severity}: {test_id}: {msg}" > bandit_output.log || true
           if [ -s bandit_output.log ]; then
-            BANDIT_STATUS="🔴 Vulnerabilidades encontradas"
+            BANDIT_STATUS="❌ Vulnerabilidades encontradas"
             echo '| Arquivo | Linha | Severidade | Código | Descrição |' >> $GITHUB_STEP_SUMMARY
-            echo '|---------|-------|-------------|--------|-----------|' >> $GITHUB_STEP_SUMMARY
+            echo '|---------|-------|------------|--------|-----------|' >> $GITHUB_STEP_SUMMARY
             awk -F':' '{print "| " $1 " | " $2 " | " $3 " | " $4 " | " $5 " |"}' bandit_output.log >> $GITHUB_STEP_SUMMARY
           else
-            echo "✅ Nenhuma vulnerabilidade alta encontrada com Bandit." >> $GITHUB_STEP_SUMMARY
+            echo "✅ Nenhuma vulnerabilidade alta identificada com Bandit." >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "### ⚠️ Safety (CVEs Críticos)" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Safety (vulnerabilidades em dependências)" >> $GITHUB_STEP_SUMMARY
           if [ -f requirements.txt ]; then
             safety check -r requirements.txt --output=bare > safety_output.log || true
           else
             safety check --output=bare > safety_output.log || true
           fi
           if grep -i "CRITICAL" safety_output.log > /dev/null; then
-            SAFETY_STATUS="🔴 CVEs críticos encontrados"
-            echo '| Pacote | Versão instalada | CVE | Descrição |' >> $GITHUB_STEP_SUMMARY
-            echo '|--------|------------------|-----|------------|' >> $GITHUB_STEP_SUMMARY
+            SAFETY_STATUS="❌ CVEs críticos encontrados"
+            echo '| Pacote | Versão | CVE | Descrição |' >> $GITHUB_STEP_SUMMARY
+            echo '|--------|--------|-----|------------|' >> $GITHUB_STEP_SUMMARY
             grep -i "CRITICAL" safety_output.log | awk -F',' '{print "| " $1 " | " $2 " | " $3 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY
           else
-            echo "✅ Nenhuma vulnerabilidade crítica em dependências (Safety)." >> $GITHUB_STEP_SUMMARY
+            echo "✅ Nenhum CVE crítico encontrado com Safety." >> $GITHUB_STEP_SUMMARY
           fi
 
-          echo "---" >> $GITHUB_STEP_SUMMARY
-
-      - name: Run Tests with Coverage
+      - name: ✅ Run Tests with Coverage
         run: |
           if [ -d "src/tests" ]; then
-            echo "### ✅ **Resultados dos Testes**" >> $GITHUB_STEP_SUMMARY
+            echo "---" >> $GITHUB_STEP_SUMMARY
+            echo "## 🧪 Resultados dos Testes Unitários" >> $GITHUB_STEP_SUMMARY
+
             coverage run -m pytest src/tests -v > result.log
             TEST_RESULT=$?
 
             if [ $TEST_RESULT -eq 0 ]; then
-              echo "🟢 **Status:** OK" >> $GITHUB_STEP_SUMMARY
+              echo "✅ Todos os testes passaram com sucesso." >> $GITHUB_STEP_SUMMARY
             else
-              TESTS_STATUS="🔴 Falhas nos testes"
-              echo "🔴 **Status:** Failed" >> $GITHUB_STEP_SUMMARY
+              TESTS_STATUS="❌ Falhas encontradas nos testes"
+              echo "❌ Falhas encontradas:" >> $GITHUB_STEP_SUMMARY
               echo '```' >> $GITHUB_STEP_SUMMARY
               grep -E "FAILURES|FAILED|ERROR" -A 10 result.log >> $GITHUB_STEP_SUMMARY
               echo '```' >> $GITHUB_STEP_SUMMARY
             fi
 
-            echo "### 🧪 **Cobertura de Testes**" >> $GITHUB_STEP_SUMMARY
-            echo '| **Arquivo** | **Cobertura** |' >> $GITHUB_STEP_SUMMARY
-            echo '|-------------|---------------|' >> $GITHUB_STEP_SUMMARY
+            echo "## 📈 Cobertura de Testes" >> $GITHUB_STEP_SUMMARY
+            echo '| Arquivo | Cobertura |' >> $GITHUB_STEP_SUMMARY
+            echo '|---------|-----------|' >> $GITHUB_STEP_SUMMARY
             coverage report --omit="*/tests/*,*/__init__.py" | tail -n +3 | grep -v "TOTAL" | awk '{printf("| `%s` | %s |\n", $1, $4)}' >> $GITHUB_STEP_SUMMARY
-
             TOTAL_COVERAGE=$(coverage report | grep TOTAL | awk '{print $4}')
             echo "**Cobertura Total:** $TOTAL_COVERAGE" >> $GITHUB_STEP_SUMMARY
 
             coverage html -d coverage_html
           else
-            echo "⚠️ **Pasta de testes não encontrada em src/tests.**"
+            echo "⚠️ Pasta de testes não encontrada (src/tests)."
             exit 0
           fi
 
-      - name: Upload Coverage HTML Report
+      - name: ☁️ Upload HTML Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage_html/
           retention-days: 7
 
-      - name: Link para HTML no Step Summary + Resumo Final
+      - name: 📌 Resumo Final + Link para Relatório HTML
         run: |
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "### 📊 **Resumo Geral**" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Resumo Final" >> $GITHUB_STEP_SUMMARY
           echo '| Verificação | Status |' >> $GITHUB_STEP_SUMMARY
           echo '|-------------|--------|' >> $GITHUB_STEP_SUMMARY
-          echo "| 🔍 Ruff        | $RUFF_STATUS |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🔒 Bandit      | $BANDIT_STATUS |" >> $GITHUB_STEP_SUMMARY
-          echo "| ⚠️ Safety      | $SAFETY_STATUS |" >> $GITHUB_STEP_SUMMARY
-          echo "| ✅ Testes      | $TESTS_STATUS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Ruff         | $RUFF_STATUS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Bandit       | $BANDIT_STATUS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Safety       | $SAFETY_STATUS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Testes       | $TESTS_STATUS |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 [**Abrir Relatório de Cobertura HTML (via Artifact)**](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [Clique aqui para acessar o Relatório de Cobertura HTML (Artifact)](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
