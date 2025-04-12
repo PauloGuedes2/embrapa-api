@@ -37,6 +37,7 @@ jobs:
           else
             echo "⚠️ requirements.txt não encontrado, instalando dependências básicas..."
             pip install pytest ruff bandit safety coverage
+          fi
 
       - name: Verify installations
         run: |
