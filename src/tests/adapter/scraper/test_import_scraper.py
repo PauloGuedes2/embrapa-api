@@ -1,9 +1,13 @@
+import os
+import sys
 from unittest.mock import patch, MagicMock
 
 import pytest
 
-from adapter.scraper.import_scraper import ImportScraper
-from domain.enum.enums import ImportSubOption
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+
+from src.app.adapter.scraper.import_scraper import ImportScraper
+from src.app.domain.enum.enums import ImportSubOption
 
 HTTP_FAKE = "http://fakeurl.com"
 

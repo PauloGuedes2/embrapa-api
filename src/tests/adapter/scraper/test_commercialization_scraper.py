@@ -1,8 +1,12 @@
+import os
+import sys
 from unittest.mock import patch, MagicMock
 
 import pytest
 
-from adapter.scraper.commercialization_scraper import CommercializationScraper
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+
+from src.app.adapter.scraper.commercialization_scraper import CommercializationScraper
 
 
 class TestCommercializationScraper:

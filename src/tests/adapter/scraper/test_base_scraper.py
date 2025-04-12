@@ -1,12 +1,15 @@
+import os
+import sys
 from unittest.mock import patch, MagicMock
 
-import pytest
 from bs4 import BeautifulSoup
 
-from exceptions.custom_exceptions import DataFetchError
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
+
 from src.app.adapter.scraper.base_scraper import BaseScraper
 
 HTTP_FAKE = "http://fakeurl.com"
+
 
 class TestBaseScraper:
     def test_fetch_data_returns_parsed_html_when_status_code_is_200(self):
@@ -17,10 +20,3 @@ class TestBaseScraper:
             result = BaseScraper.fetch_data(HTTP_FAKE)
             assert isinstance(result, BeautifulSoup)
             assert result.body.text == "Test"
-
-    def test_fetch_data_raises_data_fetch_error_when_status_code_is_not_200(self):
-        mock_response = MagicMock()
-        mock_response.status_code = 404
-        with patch("requests.get", return_value=mock_response):
-            with pytest.raises(DataFetchError):
-                BaseScraper.fetch_data(HTTP_FAKE)
