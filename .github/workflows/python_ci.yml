@@ -60,10 +60,16 @@ jobs:
           if [ -d "src/tests" ]; then
             echo "### ✅ **Resultados dos Testes**" >> $GITHUB_STEP_SUMMARY
             coverage run -m pytest src/tests -v > result.log
+            TEST_RESULT=$?
 
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -n 5 result.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
+            if [ $TEST_RESULT -eq 0 ]; then
+              echo "🟢 **Status:** OK" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "🔴 **Status:** Failed" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              grep -E "FAILURES|FAILED|ERROR" -A 10 result.log >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+            fi
 
             echo "### 🧪 **Cobertura de Testes**" >> $GITHUB_STEP_SUMMARY
             echo '| **Arquivo** | **Cobertura** |' >> $GITHUB_STEP_SUMMARY
@@ -75,6 +81,7 @@ jobs:
             echo "⚠️ **Pasta de testes não encontrada em src/tests.**"
             exit 0
           fi
+      
 
       - name: Upload Coverage HTML Report
         uses: actions/upload-artifact@v4
