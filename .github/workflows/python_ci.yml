@@ -58,13 +58,6 @@ jobs:
       - name: Run Tests with Coverage
         run: |
           if [ -d "src/tests" ]; then
-#            echo "### ✅ **Resultados dos Testes**" >> $GITHUB_STEP_SUMMARY
-#            coverage run -m pytest src/tests -v > result.log
-
-#            echo '```' >> $GITHUB_STEP_SUMMARY
-#            tail -n 1 result.log >> $GITHUB_STEP_SUMMARY
-#            echo '```' >> $GITHUB_STEP_SUMMARY
-
             echo "### 🧪 **Cobertura de Testes**" >> $GITHUB_STEP_SUMMARY
             echo '| **Arquivo** | **Cobertura** |' >> $GITHUB_STEP_SUMMARY
             echo '|-------------|---------------|' >> $GITHUB_STEP_SUMMARY
