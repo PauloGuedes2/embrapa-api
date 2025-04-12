@@ -1,4 +1,4 @@
-from adapters.scraper.commercialization_scraper import CommercializationScraper
+from adapter.scraper.commercialization_scraper import CommercializationScraper
 from domain.ports.commercialization_port import CommercializationInterface
 
 

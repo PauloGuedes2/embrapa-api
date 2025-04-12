@@ -1,4 +1,4 @@
-from adapters.scraper.import_scraper import ImportScraper
+from adapter.scraper.import_scraper import ImportScraper
 from domain.ports.import_port import ImportInterface
 
 

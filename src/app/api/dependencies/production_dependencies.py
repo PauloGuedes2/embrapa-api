@@ -1,4 +1,4 @@
-from adapters.scraper.production_scraper import ProductionScraper
+from adapter.scraper.production_scraper import ProductionScraper
 from domain.ports.production_port import ProductionInterface
 
 

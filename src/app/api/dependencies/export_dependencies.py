@@ -1,4 +1,4 @@
-from adapters.scraper.export_scraper import ExportScraper
+from adapter.scraper.export_scraper import ExportScraper
 from domain.ports.export_port import ExportInterface
 
 
