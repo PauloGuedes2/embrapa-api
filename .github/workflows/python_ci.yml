@@ -45,15 +45,15 @@ jobs:
           echo "## 🔴 Relatório de Qualidade" > $GITHUB_STEP_SUMMARY
           echo "### 📅 Execução: $(TZ='America/Sao_Paulo' date +'%d/%m/%Y %H:%M:%S (BRT)')" >> $GITHUB_STEP_SUMMARY
           
-          # Análise Estática
+          # Análise Estática com Ruff
           echo "### 🔍 Ruff (Bugs/Security)" >> $GITHUB_STEP_SUMMARY
           ruff check src/ --select B,S --exit-non-zero-on-fix --format=github | grep "::error" | awk -F'::' '{print "| " $3 " | " $4 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhum problema crítico encontrado" >> $GITHUB_STEP_SUMMARY
 
-          # Segurança
+          # Segurança com Bandit
           echo "### 🔒 Bandit (Vulnerabilidades)" >> $GITHUB_STEP_SUMMARY
           bandit -r src/ -ll --severity-level high --confidence-level high -f custom --msg-template "{abspath}:{line}: {severity}: {test_id}: {msg}" | awk -F':' '{print "| " $1 " | " $2 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade alta encontrada" >> $GITHUB_STEP_SUMMARY
 
-          # Dependências
+          # Dependências com Safety
           echo "### ⚠️ Safety (CVEs Críticos)" >> $GITHUB_STEP_SUMMARY
           safety check --output brief | grep -i "CRITICAL" >> $GITHUB_STEP_SUMMARY || echo "✅ Nenhuma vulnerabilidade crítica em dependências" >> $GITHUB_STEP_SUMMARY
 
@@ -62,7 +62,7 @@ jobs:
           if [ -d "src/tests" ]; then
             echo "### ✅ Resultados dos Testes" >> $GITHUB_STEP_SUMMARY
 
-            coverage run -m pytest src/tests -v | tee result.log
+            coverage run -m pytest src/tests -v --fail-fast | tee result.log
             echo '```' >> $GITHUB_STEP_SUMMARY
             cat result.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
@@ -74,10 +74,10 @@ jobs:
 
             # Geração do HTML (sem salvar no repo)
             coverage html -d coverage_html
-
           else
             echo "⚠️ Pasta de testes não encontrada em src/tests"
             exit 0
+          fi
 
       - name: Upload Coverage HTML Report
         uses: actions/upload-artifact@v4
