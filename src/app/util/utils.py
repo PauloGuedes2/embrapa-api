@@ -2,7 +2,7 @@ from typing import Optional, Callable, List, Any, Union
 
 from bs4 import BeautifulSoup
 
-from domain.enum.enums import ImportSubOption, ExportSubOption
+from domain.enum.enums import ImportSubOption, ExportSubOption, ProcessingSubOption
 
 
 class Utils:
@@ -32,7 +32,7 @@ class Utils:
     def build_url(
             base_url: str,
             year: Optional[int] = None,
-            sub_option: Optional[Union[ImportSubOption, ExportSubOption]] = None,
+            sub_option: Optional[Union[ImportSubOption, ExportSubOption, ProcessingSubOption]] = None,
             year_query_param: str = "ano",
             suboption_query_param: str = "subopcao"
     ) -> str:
@@ -42,6 +42,8 @@ class Utils:
                 raise ValueError("URL de importação requer ImportSubOption")
             if "opcao=opt_06" in base_url and not isinstance(sub_option, ExportSubOption):
                 raise ValueError("URL de exportação requer ExportSubOption")
+            if "opcao=opt_03" in base_url and not isinstance(sub_option, ProcessingSubOption):
+                raise ValueError("URL de processamento requer ProcessingSubOption")
 
         params = []
         if year is not None:
