@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Optional
 
-from adapters.scraper.base_scraper import ImportScraperBase
+from adapter.scraper.base_scraper import ImportScraperBase
 from application.validator.year_validator import YearValidator
 from config.params import BASE_URL
 from domain.entities.import_entity import ImportEntity
