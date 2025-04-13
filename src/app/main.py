@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from api.controllers.commercialization_controller import router as commercialization_router
 from api.controllers.export_controller import router as export_router
 from api.controllers.import_controller import router as import_router
+from api.controllers.processing_controller import router as processing_router
 from api.controllers.production_controller import router as production_router
 from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError
 
@@ -18,6 +19,7 @@ app.include_router(commercialization_router, prefix="/api", tags=["Commercializa
 app.include_router(production_router, prefix="/api", tags=["Production"])
 app.include_router(import_router, prefix="/api", tags=["Import"])
 app.include_router(export_router, prefix="/api", tags=["Export"])
+app.include_router(processing_router, prefix="/api", tags=["Processing"])
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

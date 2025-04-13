@@ -7,8 +7,9 @@ from bs4 import BeautifulSoup
 from domain.entities.commercialization_entity import CommercializationEntity
 from domain.entities.export_entity import ExportEntity
 from domain.entities.import_entity import ImportEntity
+from domain.entities.processing_entity import ProcessingEntity
 from domain.entities.production_entity import ProductionEntity
-from domain.enum.enums import ExportSubOption, ImportSubOption
+from domain.enum.enums import ExportSubOption, ImportSubOption, ProcessingSubOption
 from exceptions.custom_exceptions import DataFetchError
 
 
@@ -45,4 +46,10 @@ class ImportScraperBase(BaseScraper):
 class ExportScraperBase(BaseScraper):
     @abstractmethod
     def fetch_export(self, year: Optional[int], sub_option: Optional[ExportSubOption]) -> list[ExportEntity]:
+        pass
+
+
+class ProcessingScraperBase(BaseScraper):
+    @abstractmethod
+    def fetch_processing(self, year: Optional[int], sub_option: Optional[ProcessingSubOption]) -> list[ProcessingEntity]:
         pass
