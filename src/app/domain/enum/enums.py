@@ -22,3 +22,10 @@ class ExportSubOption(str, Enum):
     subopt_02 = "Espumantes"
     subopt_03 = "Uvas frescas"
     subopt_04 = "Suco de uva"
+
+
+class ProcessingSubOption(str, Enum):
+    subopt_01 = "Viníferas"
+    subopt_02 = "Americanas e híbridas"
+    subopt_03 = "Uvas de mesa"
+    subopt_04 = "Sem classificação"
