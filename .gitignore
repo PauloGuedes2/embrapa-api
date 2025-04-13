@@ -1,43 +1,58 @@
-### IDEs ###
-# PyCharm
-.idea/
-*.iml
-.idea_modules/
-
-# VS Code
-.vscode/
-*.code-workspace
-
-### Python ###
+# Bytecode do Python
 __pycache__/
 *.py[cod]
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+*$py.class
 
-# Environments
-.env
-.venv
-env/
+# Ambiente virtual
 venv/
-ENV/
-env.bak/
-venv.bak/
+.env
+.env.*
 
-# Logs e databases
+# Diretórios de build
+build/
+dist/
+*.egg-info/
+
+# PyCharm e outras IDEs JetBrains
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# Arquivos de cobertura de testes
+.coverage
+coverage.xml
+htmlcov/
+
+# Pytest
+.cache/
+.pytest_cache/
+
+# Logs
 *.log
+
+# Arquivos temporários e backups
+*.tmp
+*.bak
+*.orig
+*.old
+*.swp
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Cache e artefatos de ferramentas
+.mypy_cache/
+ruff_cache/
+.tox/
+*.pem
+*.key
+
+# GitHub Actions (logs locais)
+.github/workflows/*.log
+
+# Arquivos zipados ou de backup
+*.zip
+*.tar.gz

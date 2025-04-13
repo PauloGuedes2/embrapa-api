@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Optional
 
-from adapters.scraper.base_scraper import ProcessingScraperBase
+from adapter.scraper.base_scraper import ProcessingScraperBase
 from application.validator.year_validator import YearValidator
 from config.params import BASE_URL
 from domain.entities.processing_entity import ProcessingEntity
@@ -14,9 +14,9 @@ class ProcessingScraper(ProcessingScraperBase, ProcessingInterface, ABC):
     def __init__(self):
         super().__init__(f"{BASE_URL}{Option.PROCESSING.value}")
 
-    def fetch_processing(self, year: Optional[int], suboption: ProcessingSubOption) -> list[ProcessingEntity]:
+    def fetch_processing(self, year: Optional[int], sub_option: ProcessingSubOption) -> list[ProcessingEntity]:
         year = YearValidator.validate(self.base_url, year)
-        url = Utils.build_url(self.base_url, year, suboption)
+        url = Utils.build_url(self.base_url, year, sub_option)
         soup = self.fetch_data(url)
 
         table_data = Utils.extract_generic_table_data(
