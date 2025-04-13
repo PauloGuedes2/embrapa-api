@@ -14,7 +14,7 @@ class ExportScraper(ExportScraperBase, ExportInterface, ABC):
     def __init__(self):
         super().__init__(f"{BASE_URL}{Option.EXPORT.value}")
 
-    def fetch_export(self, year: Optional[int], sub_option: ExportSubOption) -> list[ExportEntity]:
+    def fetch_export(self, year: Optional[int], sub_option: Optional[ExportSubOption]) -> list[ExportEntity]:
         year = YearValidator.validate(self.base_url, year)
         url = Utils.build_url(self.base_url, year, sub_option)
         soup = self.fetch_data(url)

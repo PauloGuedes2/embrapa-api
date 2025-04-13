@@ -8,5 +8,5 @@ class ProcessingUseCase:
     def __init__(self, scraper: ProcessingInterface):
         self.scraper = scraper
 
-    def execute(self, year: Optional[int], sub_option: ProcessingSubOption) -> list[ProcessingEntity]:
+    def execute(self, year: Optional[int], sub_option: Optional[ProcessingSubOption]) -> list[ProcessingEntity]:
         return self.scraper.fetch_processing(year, sub_option)
