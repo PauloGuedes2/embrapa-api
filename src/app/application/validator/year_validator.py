@@ -6,7 +6,7 @@ from exceptions.custom_exceptions import YearValidationError
 class YearValidator:
     DEFAULT_RANGE = (1970, 2023)
     SPECIAL_RANGE = (1970, 2024)
-    SPECIAL_ENDPOINTS = ("opt_05", "opt_06")
+    SPECIAL_ENDPOINTS = ("opt_05", "opt_06", "opt_03")
 
     @classmethod
     def validate(cls, base_url: str, year: Optional[int] = None) -> Optional[int]:
