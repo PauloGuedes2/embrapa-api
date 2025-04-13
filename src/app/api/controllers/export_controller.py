@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
 
-from api.dependencies.export_dependencies import ExportDependencies
+from api.dependencies.scraper_dependencies import ScraperDependencies
 from application.usecase.export_usercase import ExportUseCase
 from domain.enum.enums import ExportSubOption
 from domain.ports.export_port import ExportInterface
@@ -16,7 +16,7 @@ class ExportController:
     def get_export(
             year: Optional[int] = Query(None, description="Year of export data (1970 - 2024)"),
             sub_option: ExportSubOption = Query(None, description="Suboption for the request"),
-            scraper: ExportInterface = Depends(ExportDependencies.get_scraper),
+            scraper: ExportInterface = Depends(ScraperDependencies.get_export_scraper),
     ):
         use_case = ExportUseCase(scraper)
         return use_case.execute(year, sub_option)
