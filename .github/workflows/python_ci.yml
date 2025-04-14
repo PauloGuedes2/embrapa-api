@@ -36,7 +36,7 @@ jobs:
             pip install -r requirements.txt
           else
             echo "⚠️ requirements.txt não encontrado. Instalando dependências básicas..."
-            pip install pytest ruff bandit safety coverage
+            pip install pytest ruff bandit safety coverage pytest-asyncio 
           fi
 
       - name: 🔍 Verificar instalações
@@ -118,14 +118,6 @@ jobs:
               grep -E "FAILURES|FAILED|ERROR" -A 10 result.log >> $GITHUB_STEP_SUMMARY
               echo '```' >> $GITHUB_STEP_SUMMARY
             fi
-
-            echo "### 📈 Cobertura de Testes" >> $GITHUB_STEP_SUMMARY
-            echo '| Arquivo | Cobertura |' >> $GITHUB_STEP_SUMMARY
-            echo '|---------|-----------|' >> $GITHUB_STEP_SUMMARY
-            coverage report --omit="*/tests/*,*/__init__.py" | tail -n +3 | grep -v "TOTAL" | awk '{printf("| `%s` | %s |\n", $1, $4)}' >> $GITHUB_STEP_SUMMARY
-
-            TOTAL_COVERAGE=$(coverage report | grep TOTAL | awk '{print $4}')
-            echo "**Cobertura Total:** $TOTAL_COVERAGE" >> $GITHUB_STEP_SUMMARY
 
             coverage html -d coverage_html
           else

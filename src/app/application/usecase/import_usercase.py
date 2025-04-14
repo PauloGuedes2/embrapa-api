@@ -9,5 +9,5 @@ class ImportUseCase:
     def __init__(self, scraper: ImportInterface):
         self.scraper = scraper
 
-    def execute(self, year: Optional[int], sub_option: ImportSubOption) -> list[ImportEntity]:
+    def execute(self, year: Optional[int], sub_option: Optional[ImportSubOption]) -> list[ImportEntity]:
         return self.scraper.fetch_import(year, sub_option)
