@@ -15,7 +15,7 @@ class ProcessingController:
     @router.get("/processamento/{ano}/{subopcao}")
     def get_processing(
             year: Optional[int] = Query(None, description="Year of export data (1970 - 2024)"),
-            sub_option: ProcessingSubOption = Query(None, description="Suboption for the request"),
+            sub_option: Optional[ProcessingSubOption] = Query(None, description="Suboption for the request"),
             scraper: ProcessingInterface = Depends(ScraperDependencies.get_processing_scraper),
     ):
         use_case = ProcessingUseCase(scraper)

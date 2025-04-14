@@ -15,7 +15,7 @@ class ExportController:
     @router.get("/exportacao/{ano}/{subopcao}")
     def get_export(
             year: Optional[int] = Query(None, description="Year of export data (1970 - 2024)"),
-            sub_option: ExportSubOption = Query(None, description="Suboption for the request"),
+            sub_option: Optional[ExportSubOption] = Query(None, description="Suboption for the request"),
             scraper: ExportInterface = Depends(ScraperDependencies.get_export_scraper),
     ):
         use_case = ExportUseCase(scraper)

@@ -9,5 +9,5 @@ class ExportUseCase:
     def __init__(self, scraper: ExportInterface):
         self.scraper = scraper
 
-    def execute(self, year: Optional[int], sub_option: ExportSubOption) -> list[ExportEntity]:
+    def execute(self, year: Optional[int], sub_option: Optional[ExportSubOption]) -> list[ExportEntity]:
         return self.scraper.fetch_export(year, sub_option)

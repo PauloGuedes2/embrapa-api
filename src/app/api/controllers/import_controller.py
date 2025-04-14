@@ -13,9 +13,9 @@ router = APIRouter()
 class ImportController:
     @staticmethod
     @router.get("/importacao/{ano}/{subopcao}")
-    def get_export(
-            year: Optional[int] = Query(None, description="Year of export data (1970 - 2024)"),
-            sub_option: ImportSubOption = Query(None, description="Suboption for the request"),
+    def get_import(
+            year: Optional[int] = Query(None, description="Year of import data (1970 - 2024)"),
+            sub_option: Optional[ImportSubOption] = Query(None, description="Suboption for the request"),
             scraper: ImportInterface = Depends(ScraperDependencies.get_import_scraper),
     ):
         use_case = ImportUseCase(scraper)
