@@ -9,7 +9,7 @@ omit =
     src/app/domain/entities/*
     src/app/domain/enum/*
     src/app/domain/ports/*
-    tests/*
+    # tests/*
 
 [report]
 exclude_lines =
