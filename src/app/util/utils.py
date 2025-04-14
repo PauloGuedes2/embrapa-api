@@ -39,11 +39,11 @@ class Utils:
 
         if sub_option:
             if "opcao=opt_05" in base_url and not isinstance(sub_option, ImportSubOption):
-                raise ValueError("URL de importação requer ImportSubOption")
+                raise ValueError("Import URL requires ImportSubOption")
             if "opcao=opt_06" in base_url and not isinstance(sub_option, ExportSubOption):
-                raise ValueError("URL de exportação requer ExportSubOption")
+                raise ValueError("Export URL requires ExportSubOption")
             if "opcao=opt_03" in base_url and not isinstance(sub_option, ProcessingSubOption):
-                raise ValueError("URL de processamento requer ProcessingSubOption")
+                raise ValueError("Processing URL requires ProcessingSubOption")
 
         params = []
         if year is not None:

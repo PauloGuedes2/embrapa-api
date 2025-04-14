@@ -14,7 +14,7 @@ class ProcessingScraper(ProcessingScraperBase, ProcessingInterface, ABC):
     def __init__(self):
         super().__init__(f"{BASE_URL}{Option.PROCESSING.value}")
 
-    def fetch_processing(self, year: Optional[int], sub_option: ProcessingSubOption) -> list[ProcessingEntity]:
+    def fetch_processing(self, year: Optional[int], sub_option: Optional[ProcessingSubOption]) -> list[ProcessingEntity]:
         year = YearValidator.validate(self.base_url, year)
         url = Utils.build_url(self.base_url, year, sub_option)
         soup = self.fetch_data(url)
