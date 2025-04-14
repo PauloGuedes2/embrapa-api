@@ -1,7 +1,8 @@
 from typing import Optional
+
+from domain.entities.processing_entity import ProcessingEntity
 from domain.enum.enums import ProcessingSubOption
 from domain.ports.processing_port import ProcessingInterface
-from domain.entities.processing_entity import ProcessingEntity
 
 
 class ProcessingUseCase:

@@ -1,0 +1,24 @@
+[run]
+branch = True
+source =
+    src/app
+omit =
+    src/app/config/*
+    src/app/api/dependencies/*
+    src/app/api/usecase/*
+    src/app/domain/entities/*
+    src/app/domain/enum/*
+    src/app/domain/ports/*
+    tests/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    def __str__
+    if self\.debug
+    if __name__ == .__main__.:
+    raise NotImplementedError
+
+show_missing = True
+skip_covered = True

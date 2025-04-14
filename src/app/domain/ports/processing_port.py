@@ -1,7 +1,8 @@
-from typing import List, Optional
 from abc import ABC, abstractmethod
-from domain.enum.enums import ProcessingSubOption
+from typing import List, Optional
+
 from domain.entities.processing_entity import ProcessingEntity
+from domain.enum.enums import ProcessingSubOption
 
 
 class ProcessingInterface(ABC):
