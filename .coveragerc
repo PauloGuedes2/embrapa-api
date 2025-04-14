@@ -1,7 +1,7 @@
 [run]
 branch = True
 source =
-    src/app
+    src/
 omit =
     src/app/config/*
     src/app/api/dependencies/*
@@ -20,5 +20,5 @@ exclude_lines =
     if __name__ == .__main__.:
     raise NotImplementedError
 
-show_missing = True
-skip_covered = True
+show_missing = False
+skip_covered = False
