@@ -5,11 +5,13 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "tb_contas"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
-    is_active = Column(Boolean, default=True)
-    role = Column(String, default="user")
-    date_create = Column(DateTime, default=datetime.utcnow)
+    usuario = Column(String, unique=True, index=True, nullable=False)
+    hash_password = Column(String, nullable=False)
+    mail = Column(String, nullable=False)
+    stats = Column(Boolean, default=True)
+    access_role = Column(String, default="user")
+    create_date = Column(DateTime, default=datetime.utcnow) 
+    last_update = Column(DateTime, default=datetime.utcnow)
