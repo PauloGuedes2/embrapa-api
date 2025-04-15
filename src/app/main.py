@@ -10,16 +10,19 @@ from api.controllers.export_controller import router as export_router
 from api.controllers.import_controller import router as import_router
 from api.controllers.processing_controller import router as processing_router
 from api.controllers.production_controller import router as production_router
+from api.controllers.auth_controller import router as login_router
 from config.params import ROUTER_PREFIX
 from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError
 
 app = FastAPI()
 
+app.include_router(login_router, prefix=ROUTER_PREFIX, tags=["Login"])
 app.include_router(production_router, prefix=ROUTER_PREFIX, tags=["Produção"])
 app.include_router(processing_router, prefix=ROUTER_PREFIX, tags=["Processamento"])
 app.include_router(commercialization_router, prefix=ROUTER_PREFIX, tags=["Comercialização"])
 app.include_router(import_router, prefix=ROUTER_PREFIX, tags=["Importação"])
 app.include_router(export_router, prefix=ROUTER_PREFIX, tags=["Exportação"])
+
 
 
 logging.basicConfig(level=logging.INFO)
