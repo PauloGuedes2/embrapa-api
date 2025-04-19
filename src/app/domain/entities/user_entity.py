@@ -1,17 +1,17 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
+
+from util.utils import Utils
 
 Base = declarative_base()
 
-class User(Base):
-    __tablename__ = "tb_contas"
 
+class User(Base):
+    current_date = Utils.get_current_utc_brasilia().strftime("%Y-%m-%d %H:%M:%S")
+
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
-    usuario = Column(String, unique=True, index=True, nullable=False)
-    hash_password = Column(String, nullable=False)
-    mail = Column(String, nullable=False)
-    stats = Column(Boolean, default=True)
-    access_role = Column(String, default="user")
-    create_date = Column(DateTime, default=datetime.utcnow) 
-    last_update = Column(DateTime, default=datetime.utcnow)
+    user = Column(String, unique=True, index=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
+    refresh_token = Column(Text)
+    created_at = Column(DateTime, default=current_date, nullable=False)
