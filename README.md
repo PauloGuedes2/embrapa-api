@@ -71,12 +71,12 @@ A aplicação é baseada nos princípios da **Clean Architecture**, dividindo re
 
 ## 🔗 Rotas da API
 
-| Método | Endpoint                  | Descrição                                   |
-|--------|---------------------------|---------------------------------------------|
-| `GET`  | `/prodcucao/{year}`       | Retorna dados de produção para o ano        |
-| `GET`  | `/processamento/{year}`   | Retorna dados de processamento para o ano   |
-| `GET`  | `/importacao/{year}`      | Retorna dados de importação para o ano      |
-| `GET`  | `/exportacao/{year}`      | Retorna dados de exportação para o ano      |
+| Método | Endpoint                 | Descrição                                   |
+|--------|--------------------------|---------------------------------------------|
+| `GET`  | `/producao/{year}`       | Retorna dados de produção para o ano        |
+| `GET`  | `/processamento/{year}`  | Retorna dados de processamento para o ano   |
+| `GET`  | `/importacao/{year}`     | Retorna dados de importação para o ano      |
+| `GET`  | `/exportacao/{year}`     | Retorna dados de exportação para o ano      |
 | `GET`  | `/comercializacao/{year}` | Retorna dados de comercialização para o ano |
 
 📘 Acesse a documentação interativa em:  

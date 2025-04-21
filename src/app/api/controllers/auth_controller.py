@@ -1,17 +1,35 @@
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from api.dependencies.db_dependencies import get_db
-from adapter.repository.user_repository import UserRepository
-from application.usecase.auth_usecase import AuthUseCase
+
+from application.service.jwt_service import JWTService
+from application.service.password_service import PasswordService
+from config.jwt_settings import JWTSettings
+from domain.entities.user_entity import User
+from infrastructure.db.session import get_db
+from infrastructure.db.repositories.auth_repository import AuthRepository
+from api.schemas.auth_schemas import UserLogin, UserRegister, TokenResponse
 
 router = APIRouter()
+settings = JWTSettings()
+jwt_service = JWTService(settings)
+password_service = PasswordService()
 
-@router.post("/login")
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user_repo = UserRepository(db)
-    auth_usecase = AuthUseCase(user_repo)
-    token = auth_usecase.authenticate_user(form_data.username, form_data.password)
-    if not token:
-        raise HTTPException(status_code=400, detail="Credenciais inválidas ou usuário inativo")
-    return {"access_token": token, "token_type": "bearer"}
+@router.post("/auth/register", response_model=User)
+def register(user_data: UserRegister, db: Session = Depends(get_db)):
+    repo = AuthRepository(db)
+    if repo.get_user_by_username(user_data.username):
+        raise HTTPException(status_code=400, detail="Usuário já existe")
+
+    hashed = password_service.hash_password(user_data.password)
+    user = User(id=None, username=user_data.username, email=user_data.email, hashed_password=hashed, created_at="")
+    return repo.create_user(user)
+
+@router.post("/auth/login", response_model=TokenResponse)
+def login(user_data: UserLogin, db: Session = Depends(get_db)):
+    repo = AuthRepository(db)
+    user = repo.get_user_by_username(user_data.username)
+    if not user or not password_service.verify_password(user_data.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Credenciais inválidas")
+
+    token = jwt_service.create_access_token({"sub": user.username})
+    return TokenResponse(access_token=token, token_type="bearer")

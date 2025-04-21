@@ -1,29 +1,32 @@
 import logging
 import os
+import sys
+from pathlib import Path
 
 import uvicorn
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
 
+sys.path.append(str(Path(__file__).parent))
 from api.controllers.commercialization_controller import router as commercialization_router
 from api.controllers.export_controller import router as export_router
 from api.controllers.import_controller import router as import_router
 from api.controllers.processing_controller import router as processing_router
 from api.controllers.production_controller import router as production_router
-from api.controllers.auth_controller import router as login_router
+from api.controllers.auth_controller import router as auth_router
+from infrastructure.docs.openapi_config import custom_openapi
 from config.params import ROUTER_PREFIX
 from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError
 
 app = FastAPI()
 
-app.include_router(login_router, prefix=ROUTER_PREFIX, tags=["Login"])
+app.openapi = lambda: custom_openapi(app, token_url=f"{ROUTER_PREFIX}/auth/login")
+app.include_router(auth_router, prefix=ROUTER_PREFIX, tags=["Autenticação"])
 app.include_router(production_router, prefix=ROUTER_PREFIX, tags=["Produção"])
 app.include_router(processing_router, prefix=ROUTER_PREFIX, tags=["Processamento"])
 app.include_router(commercialization_router, prefix=ROUTER_PREFIX, tags=["Comercialização"])
 app.include_router(import_router, prefix=ROUTER_PREFIX, tags=["Importação"])
 app.include_router(export_router, prefix=ROUTER_PREFIX, tags=["Exportação"])
-
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
