@@ -16,7 +16,8 @@ from api.controllers.production_controller import router as production_router
 from api.controllers.auth_controller import router as auth_router
 from infrastructure.docs.openapi_config import custom_openapi
 from config.params import ROUTER_PREFIX
-from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError
+from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError, AuthError, \
+    PermissionDeniedError
 
 app = FastAPI()
 
@@ -55,6 +56,20 @@ async def not_found_error_handler(request: Request, exc: NotFoundError):
         content={"message": exc.message, "resource": exc.resource},
     )
 
+@app.exception_handler(AuthError)
+async def auth_error_handler(request: Request, exc: AuthError):
+    return JSONResponse(
+        status_code=401,
+        content={"message": exc.message},
+        headers={"WWW-Authenticate": "Bearer"}
+    )
+
+@app.exception_handler(PermissionDeniedError)
+async def permission_denied_handler(request: Request, exc: PermissionDeniedError):
+    return JSONResponse(
+        status_code=403,
+        content={"message": exc.message}
+    )
 
 class App:
     def __init__(self, host: str = "0.0.0.0", port: int = 8000):
