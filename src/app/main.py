@@ -8,6 +8,7 @@ from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
 
 sys.path.append(str(Path(__file__).parent))
+from infrastructure.db.init_db import DatabaseInitializer
 from api.controllers.commercialization_controller import router as commercialization_router
 from api.controllers.export_controller import router as export_router
 from api.controllers.import_controller import router as import_router
@@ -56,6 +57,7 @@ async def not_found_error_handler(request: Request, exc: NotFoundError):
         content={"message": exc.message, "resource": exc.resource},
     )
 
+
 @app.exception_handler(AuthError)
 async def auth_error_handler(request: Request, exc: AuthError):
     return JSONResponse(
@@ -64,6 +66,7 @@ async def auth_error_handler(request: Request, exc: AuthError):
         headers={"WWW-Authenticate": "Bearer"}
     )
 
+
 @app.exception_handler(PermissionDeniedError)
 async def permission_denied_handler(request: Request, exc: PermissionDeniedError):
     return JSONResponse(
@@ -71,12 +74,15 @@ async def permission_denied_handler(request: Request, exc: PermissionDeniedError
         content={"message": exc.message}
     )
 
+
 class App:
     def __init__(self, host: str = "0.0.0.0", port: int = 8000):
         self.host = os.getenv("HOST", host)
         self.port = int(os.getenv("PORT", port))
 
     def run(self):
+        logger.info("Starting db")
+        DatabaseInitializer().init_database()
         logger.info(f"Starting server at {self.host}:{self.port}")
         uvicorn.run(app, host=self.host, port=self.port)
 

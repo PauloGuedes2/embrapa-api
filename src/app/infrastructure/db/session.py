@@ -1,18 +1,32 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session
 from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@db:5432/postgres")
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+class DatabaseSession:
+    def __init__(self):
+        self.app_env = os.getenv("APP_ENV", "dev")
+        self.database_url = self._get_database_url()
+        self.engine = create_engine(self.database_url)
+        self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
+
+    def _get_database_url(self) -> str:
+        if self.app_env == "docker":
+            return os.getenv("DATABASE_URL_DOCKER", "postgresql://postgres:postgres@db:5432/postgres")
+        elif self.app_env == "prod":
+            return os.getenv("DATABASE_URL_PROD")
+        return os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/postgres")
+
+    def get_session(self) -> Session:
+        return self.SessionLocal()
+
 
 def get_db():
-    db = SessionLocal()
+    db_session = DatabaseSession().get_session()
     try:
-        yield db
+        yield db_session
     finally:
-        db.close()
+        db_session.close()

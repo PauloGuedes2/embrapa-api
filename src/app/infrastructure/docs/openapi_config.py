@@ -13,7 +13,7 @@ def custom_openapi(app: FastAPI, token_url: str) -> dict:
     )
 
     openapi_schema["components"]["securitySchemes"] = {
-        "OAuth2PasswordBearer": {
+        "bearerAuth": {
             "type": "http",
             "scheme": "bearer",
             "bearerFormat": "JWT"
@@ -22,7 +22,7 @@ def custom_openapi(app: FastAPI, token_url: str) -> dict:
 
     for path in openapi_schema["paths"].values():
         for method in path.values():
-            method["security"] = [{"OAuth2PasswordBearer": []}]
+            method.setdefault("security", []).append({"bearerAuth": []})
 
     app.openapi_schema = openapi_schema
     return app.openapi_schema

@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from api.schemas.auth_schemas import UserRegister, TokenResponse, UserLogin
@@ -46,4 +45,5 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
         raise AuthError("Incorrect username or password")
 
     token = jwt_service.create_access_token({"sub": user.username})
-    return TokenResponse(access_token=token, token_type="bearer")
+    refresh_token = jwt_service.create_refresh_token({"sub": user.username})
+    return TokenResponse(access_token=token, refresh_token=refresh_token, token_type="bearer")
