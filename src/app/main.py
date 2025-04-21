@@ -13,7 +13,11 @@ from api.controllers.production_controller import router as production_router
 from config.params import ROUTER_PREFIX
 from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError
 
-app = FastAPI()
+app = FastAPI(
+    title="Embrapa API",
+    description="API para gerenciamento de dados de produção, processamento, comercialização, importação e exportação da  vitivinicultura.",
+    version="1.0.0"
+)
 
 app.include_router(production_router, prefix=ROUTER_PREFIX, tags=["Produção"])
 app.include_router(processing_router, prefix=ROUTER_PREFIX, tags=["Processamento"])
