@@ -14,7 +14,7 @@ class DatabaseSession:
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
     @staticmethod
-    def _get_database_url(self) -> str:
+    def _get_database_url() -> str:
         return os.getenv("DATABASE_URL", "sqlite:///./app.db")
 
     def get_session(self) -> Session:
