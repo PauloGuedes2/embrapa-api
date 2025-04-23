@@ -7,7 +7,6 @@ import uvicorn
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
 
-sys.path.append(str(Path(__file__).parent))
 from infrastructure.db.init_db import DatabaseInitializer
 from api.controllers.commercialization_controller import router as commercialization_router
 from api.controllers.export_controller import router as export_router
@@ -15,6 +14,8 @@ from api.controllers.import_controller import router as import_router
 from api.controllers.processing_controller import router as processing_router
 from api.controllers.production_controller import router as production_router
 from api.controllers.auth_controller import router as auth_router
+from api.controllers.health_db_controller import router as health_router
+
 from infrastructure.docs.openapi_config import custom_openapi
 from config.params import ROUTER_PREFIX
 from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError, AuthError, \
@@ -24,6 +25,7 @@ app = FastAPI()
 
 app.openapi = lambda: custom_openapi(app, token_url=f"{ROUTER_PREFIX}/auth/login")
 app.include_router(auth_router, prefix=ROUTER_PREFIX, tags=["Autenticação"])
+app.include_router(health_router, tags=["Health DB"])
 app.include_router(production_router, prefix=ROUTER_PREFIX, tags=["Produção"])
 app.include_router(processing_router, prefix=ROUTER_PREFIX, tags=["Processamento"])
 app.include_router(commercialization_router, prefix=ROUTER_PREFIX, tags=["Comercialização"])
