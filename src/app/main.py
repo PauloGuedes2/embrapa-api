@@ -1,36 +1,33 @@
 import logging
 import os
-import sys
-from pathlib import Path
 
 import uvicorn
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
 
-from infrastructure.db.init_db import DatabaseInitializer
+from api.controllers.auth_controller import router as auth_router
 from api.controllers.commercialization_controller import router as commercialization_router
 from api.controllers.export_controller import router as export_router
 from api.controllers.import_controller import router as import_router
 from api.controllers.processing_controller import router as processing_router
 from api.controllers.production_controller import router as production_router
-from api.controllers.auth_controller import router as auth_router
-from api.controllers.health_db_controller import router as health_router
-
-from infrastructure.docs.openapi_config import custom_openapi
+from api.controllers.root_controller import router as root_router
 from config.params import ROUTER_PREFIX
 from exceptions.custom_exceptions import YearValidationError, DataFetchError, NotFoundError, AuthError, \
     PermissionDeniedError
+from infrastructure.db.init_db import DatabaseInitializer
+from infrastructure.docs.openapi_config import custom_openapi
 
 app = FastAPI()
 
 app.openapi = lambda: custom_openapi(app, token_url=f"{ROUTER_PREFIX}/auth/login")
 app.include_router(auth_router, prefix=ROUTER_PREFIX, tags=["Autenticação"])
-app.include_router(health_router, tags=["Health DB"])
 app.include_router(production_router, prefix=ROUTER_PREFIX, tags=["Produção"])
 app.include_router(processing_router, prefix=ROUTER_PREFIX, tags=["Processamento"])
 app.include_router(commercialization_router, prefix=ROUTER_PREFIX, tags=["Comercialização"])
 app.include_router(import_router, prefix=ROUTER_PREFIX, tags=["Importação"])
 app.include_router(export_router, prefix=ROUTER_PREFIX, tags=["Exportação"])
+app.include_router(root_router)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
