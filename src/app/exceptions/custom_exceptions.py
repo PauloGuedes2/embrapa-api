@@ -32,3 +32,23 @@ class NotFoundError(CustomException):
         self.resource = resource
         self.message = message
         super().__init__(self.message)
+
+
+class AuthError(CustomException):
+    def __init__(self, message: str = "Authentication failed"):
+        super().__init__(message)
+
+
+class InvalidTokenError(AuthError):
+    def __init__(self, message: str = "Invalid token"):
+        super().__init__(message)
+
+
+class ExpiredTokenError(AuthError):
+    def __init__(self, message: str = "Token has expired"):
+        super().__init__(message)
+
+
+class PermissionDeniedError(AuthError):
+    def __init__(self, message: str = "Permission denied"):
+        super().__init__(message)

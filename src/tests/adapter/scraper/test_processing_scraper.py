@@ -1,9 +1,10 @@
 from unittest.mock import patch, MagicMock
+
 import pytest
 
 from adapter.scraper.processing_scraper import ProcessingScraper
-from domain.enum.enums import ProcessingSubOption
 from domain.entities.processing_entity import ProcessingEntity
+from domain.enum.enums import ProcessingSubOption
 
 HTTP_FAKE = "http://fakeurl.com"
 

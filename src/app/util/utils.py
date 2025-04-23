@@ -1,3 +1,4 @@
+from datetime import datetime, timezone, timedelta
 from typing import Optional, Callable, List, Any, Union
 
 from bs4 import BeautifulSoup
@@ -55,3 +56,7 @@ class Utils:
             return base_url
 
         return f"{base_url}{'&' if '?' in base_url else '?'}{'&'.join(params)}"
+
+    @staticmethod
+    def get_current_utc_brasilia():
+        return datetime.now(timezone.utc) + timedelta(hours=-3)
