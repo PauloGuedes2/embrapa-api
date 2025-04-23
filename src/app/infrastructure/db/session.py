@@ -1,16 +1,18 @@
 import os
+
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from dotenv import load_dotenv
 
 load_dotenv()
 
-
 class DatabaseSession:
     def __init__(self):
-        self.app_env = os.getenv("APP_ENV", "dev")
         self.database_url = self._get_database_url()
-        self.engine = create_engine(self.database_url)
+        self.engine = create_engine(
+            self.database_url,
+            connect_args={"check_same_thread": False} if "sqlite" in self.database_url else {}
+        )
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
     @staticmethod

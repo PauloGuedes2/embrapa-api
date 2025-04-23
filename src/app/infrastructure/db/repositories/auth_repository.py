@@ -1,5 +1,6 @@
-from sqlalchemy.orm import Session
 from typing import Optional
+
+from sqlalchemy.orm import Session
 
 from domain.entities.user_entity import User
 from domain.ports.auth_port import AuthRepositoryInterface

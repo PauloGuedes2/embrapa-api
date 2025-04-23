@@ -2,10 +2,10 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
 
+from api.dependencies.auth_dependencies import get_current_user
 from api.dependencies.scraper_dependencies import ScraperDependencies
 from application.usecase.production_usecase import ProductionUseCase
 from domain.ports.production_port import ProductionInterface
-from api.dependencies.auth_dependencies import get_current_user
 
 router = APIRouter()
 

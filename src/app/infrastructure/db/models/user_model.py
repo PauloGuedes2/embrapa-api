@@ -1,10 +1,10 @@
 import uuid
 
-from sqlalchemy import Column, String
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, UUID
 
 from infrastructure.db.base import Base
 from util.utils import Utils
+
 
 class UserModel(Base):
     current_date = Utils.get_current_utc_brasilia().strftime("%Y-%m-%d %H:%M:%S")
