@@ -13,12 +13,9 @@ class DatabaseSession:
         self.engine = create_engine(self.database_url)
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
+    @staticmethod
     def _get_database_url(self) -> str:
-        if self.app_env == "docker":
-            return os.getenv("DATABASE_URL_DOCKER", "postgresql://postgres:postgres@db:5432/postgres")
-        elif self.app_env == "prod":
-            return os.getenv("DATABASE_URL_PROD")
-        return os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/postgres")
+        return os.getenv("DATABASE_URL", "sqlite:///./app.db")
 
     def get_session(self) -> Session:
         return self.SessionLocal()
