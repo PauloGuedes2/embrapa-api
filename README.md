@@ -16,6 +16,7 @@
 
 - [📝 Sobre o Projeto](#-sobre-o-projeto)
 - [🧱 Arquitetura](#-arquitetura)
+- [🔐 Autenticação](#-autenticação)
 - [🔗 Rotas da API](#-rotas-da-api)
 - [🚀 Como Usar](#-como-usar)
 - [✅ Execução dos Testes](#-execução-dos-testes)
@@ -60,29 +61,78 @@ A aplicação é baseada nos princípios da **Clean Architecture**, dividindo re
 | `src/app/domain/enums`            | Contém os enums                                                             |
 | `src/app/domain/ports`            | Contém as interfaces                                                        |
 | `src/app/exceptions/`             | Exceções customizadas para padronizar erros retornados pela API             |
+| `src/app/infrastructure/db/`      | Configurações e modelos de banco de dados                                   |
 | `src/app/util/utils`              | Utilitários e formatadores utilizados em múltiplas partes do sistema        |
 | `src/tests/`                      | Testes unitários organizados por camada (com uso de mocks)                  |
 | `requirements.txt`                | Lista de dependências da aplicação para instalação                          |
 | `pytest.ini`                      | Configurações globais para rodar o Pytest                                   |
 ---
 
+## 🔐 Autenticação
 
+A API utiliza autenticação JWT (Bearer Token). Para acessar as rotas protegidas:
+
+1. **Registre um usuário**:
+```
+POST /embrapa-vitivinicultura/auth/register
+```
+   
+```json 
+{
+  "username": "seu_usuario",
+  "password": "sua_senha",
+  "email": "seu@email.com"
+}
+```
+
+2. **Faça login para obter o token**:
+```
+POST /embrapa-vitivinicultura/auth/login
+```
+   
+```json 
+{
+  "username": "seu_usuario",
+  "password": "sua_senha"
+}
+```
+
+3. **Use o token nas requisições**:
+```
+Authorization: Bearer <seu_token>
+```
 
 
 ## 🔗 Rotas da API
 
-| Método | Endpoint                 | Descrição                                   |
-|--------|--------------------------|---------------------------------------------|
-| `GET`  | `/producao/{year}`       | Retorna dados de produção para o ano        |
-| `GET`  | `/processamento/{year}`  | Retorna dados de processamento para o ano   |
-| `GET`  | `/importacao/{year}`     | Retorna dados de importação para o ano      |
-| `GET`  | `/exportacao/{year}`     | Retorna dados de exportação para o ano      |
-| `GET`  | `/comercializacao/{year}` | Retorna dados de comercialização para o ano |
+Todas as rotas de dados são protegidas e requerem autenticação JWT.
+
+### 🌐 Rotas Públicas
+
+| Método | Endpoint  | Descrição                           |
+|--------|-----------|-------------------------------------|
+| `GET`  | `/`       | Rota raiz com as informações da API |
+| `GET`  | `/health` | Verificação do status da API        |
+
+### 🔒 Rotas Protegidas (requerem autenticação)
+
+| Método | Endpoint                                                  | Descrição                           |
+|--------|-----------------------------------------------------------|-------------------------------------|
+| `GET`  | `/embrapa-vitivinicultura/producao/{ano}`                 | Retorna dados de produção           |
+| `GET`  | `/embrapa-vitivinicultura/processamento/{ano}/{subopcao}` | Retorna dados de processamento      |
+| `GET`  | `/embrapa-vitivinicultura/importacao/{ano}/{subopcao}`    | Retorna dados de importação         |
+| `GET`  | `/embrapa-vitivinicultura/exportacao/{ano}/{subopcao}`    | Retorna dados de exportação         |
+| `GET`  | `/embrapa-vitivinicultura/comercializacao/{ano}`          | Retorna dados de comercialização    |
+
+### Subopções disponíveis:
+- **Processamento**: `subopt_01`, `subopt_02`, `subopt_03`, `subopt_04`
+- **Importação**: `subopt_01`, `subopt_02`, `subopt_03`, `subopt_04`, `subopt_05 `
+- **Exportação**: `subopt_01`, `subopt_02`, `subopt_03`, `subopt_04`
 
 📘 Acesse a documentação interativa em:  
 [http://localhost:8000/docs](http://localhost:8000/docs)
 
----
+--- 
 
 ## 🚀 Como Usar
 
@@ -106,7 +156,17 @@ A aplicação é baseada nos princípios da **Clean Architecture**, dividindo re
   pip install -r requirements.txt
 ```
 
-### 4. Rodar localmente
+### 4. Configurar variáveis de ambiente
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+
+```dotenv
+DATABASE_URL=sqlite:///./app.db
+JWT_SECRET_KEY=sua_chave_secreta
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=30
+```
+
+### 5. Rodar localmente
 ```bash
   uvicorn src.app.main:app --reload
 ```
