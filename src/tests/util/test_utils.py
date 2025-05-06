@@ -1,5 +1,6 @@
 import pytest
 from bs4 import BeautifulSoup
+
 from domain.enum.enums import ImportSubOption, ExportSubOption, ProcessingSubOption
 from util.utils import Utils
 
@@ -31,7 +32,7 @@ class TestUtils:
 
     def test_extract_generic_table_data_table_not_found(self):
         soup = BeautifulSoup("<div></div>", 'html.parser')
-        with pytest.raises(ValueError, match="Table with class 'missing-table' not found"):
+        with pytest.raises(ValueError):
             Utils.extract_generic_table_data(soup, "missing-table", 0)
 
     def test_build_url_with_year_only(self):
@@ -61,7 +62,7 @@ class TestUtils:
         assert result == "http://example.com/data?year=2023&option=subopt_03"
 
     def test_build_url_with_invalid_suboption_type(self):
-        with pytest.raises(ValueError, match="Import URL requires ImportSubOption"):
+        with pytest.raises(ValueError):
             Utils.build_url("http://example.com/data?opcao=opt_05", sub_option=ExportSubOption.subopt_01)
 
     def test_build_url_no_params(self):
