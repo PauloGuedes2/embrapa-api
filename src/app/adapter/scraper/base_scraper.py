@@ -4,6 +4,7 @@ from typing import Optional
 import requests
 from bs4 import BeautifulSoup
 
+from config.logger import logger
 from domain.entities.commercialization_entity import CommercializationEntity
 from domain.entities.export_entity import ExportEntity
 from domain.entities.import_entity import ImportEntity
@@ -21,6 +22,7 @@ class BaseScraper(ABC):
     def fetch_data(url) -> BeautifulSoup:
         response = requests.get(url)
         if response.status_code != 200:
+            logger.error(f"Falha ao buscar dados. Status code: {response.status_code}, URL: {url}")
             raise DataFetchError(url)
         return BeautifulSoup(response.text, "html.parser")
 

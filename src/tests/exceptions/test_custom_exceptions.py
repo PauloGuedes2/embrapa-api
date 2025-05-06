@@ -31,7 +31,7 @@ class TestCustomExceptions:
             base_url="/api/special",
             valid_range=(1970, 2023)
         )
-        expected_msg = "Invalid year 2025 for URL '/api/special'. Must be between 1970 and 2023."
+        expected_msg = "Ano inválido 2025 para a URL '/api/special'. Deve estar entre 1970 e 2023."
         assert str(exc) == expected_msg
 
     def test_year_validation_error_attributes(self):
@@ -46,7 +46,7 @@ class TestCustomExceptions:
 
     def test_data_fetch_error_default_message(self):
         exc = DataFetchError(url="/api/data")
-        assert str(exc) == "Error fetching data from URL."
+        assert str(exc) == "Erro ao buscar dados da URL."
         assert exc.url == "/api/data"
 
     def test_data_fetch_error_custom_message(self):
@@ -56,7 +56,7 @@ class TestCustomExceptions:
 
     def test_not_found_error_default_message(self):
         exc = NotFoundError(resource="abc")
-        assert str(exc) == "Resource not found."
+        assert str(exc) == "Recurso não encontrado."
         assert exc.resource == "abc"
 
     def test_not_found_error_custom_message(self):
