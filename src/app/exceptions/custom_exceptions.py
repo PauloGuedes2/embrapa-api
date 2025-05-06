@@ -13,42 +13,42 @@ class YearValidationError(CustomException):
         if message is None:
             min_year, max_year = valid_range
             message = (
-                f"Invalid year {year} for URL '{base_url}'. "
-                f"Must be between {min_year} and {max_year}."
+                f"Ano inválido {year} para a URL '{base_url}'. "
+                f"Deve estar entre {min_year} e {max_year}."
             )
 
         super().__init__(message)
 
 
 class DataFetchError(CustomException):
-    def __init__(self, url: str, message: str = "Error fetching data from URL."):
+    def __init__(self, url: str, message: str = "Erro ao buscar dados da URL."):
         self.url = url
         self.message = message
         super().__init__(self.message)
 
 
 class NotFoundError(CustomException):
-    def __init__(self, resource: str, message: str = "Resource not found."):
+    def __init__(self, resource: str, message: str = "Recurso não encontrado."):
         self.resource = resource
         self.message = message
         super().__init__(self.message)
 
 
 class AuthError(CustomException):
-    def __init__(self, message: str = "Authentication failed"):
+    def __init__(self, message: str = "Falha na autenticação"):
         super().__init__(message)
 
 
 class InvalidTokenError(AuthError):
-    def __init__(self, message: str = "Invalid token"):
+    def __init__(self, message: str = "Token inválido"):
         super().__init__(message)
 
 
 class ExpiredTokenError(AuthError):
-    def __init__(self, message: str = "Token has expired"):
+    def __init__(self, message: str = "Token expirado"):
         super().__init__(message)
 
 
 class PermissionDeniedError(AuthError):
-    def __init__(self, message: str = "Permission denied"):
+    def __init__(self, message: str = "Permissão negada"):
         super().__init__(message)

@@ -1,5 +1,6 @@
 from typing import Optional, Tuple
 
+from config.logger import logger
 from exceptions.custom_exceptions import YearValidationError
 
 
@@ -14,7 +15,8 @@ class YearValidator:
             return None
 
         if not isinstance(year, int):
-            raise TypeError("Year must be an integer value.")
+            logger.error(f"Ano inválido: {year}. Deve ser um valor inteiro.")
+            raise TypeError
 
         valid_range = cls._get_year_range(base_url)
         cls._validate_year_in_range(year, base_url, valid_range)
@@ -38,13 +40,14 @@ class YearValidator:
     ) -> None:
         min_year, max_year = valid_range
         if not min_year <= year <= max_year:
+            logger.error(f"Ano fora da faixa permitida: {year}. Faixa válida: {min_year}-{max_year}")
             raise YearValidationError(
                 year=year,
                 base_url=base_url,
                 valid_range=valid_range,
                 message=(
-                    f"Year validation failed for {base_url}. "
-                    f"Provided year: {year}, "
-                    f"Allowed range: {min_year}-{max_year}"
+                    f"Validação do ano falhou para {base_url}. "
+                    f"Ano fornecido: {year}, "
+                    f"Faixa permitida: {min_year}-{max_year}"
                 )
             )

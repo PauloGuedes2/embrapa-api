@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
+from config.logger import logger
+
 router = APIRouter()
 
 @router.get("/health", include_in_schema=False)
