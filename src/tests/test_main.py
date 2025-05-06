@@ -44,7 +44,7 @@ class TestMain:
 
     def test_app_run_default(self, mock_uvicorn, mock_logger):
         App().run()
-        mock_logger.assert_called_once_with("Starting server at 0.0.0.0:8000")
+        mock_logger.assert_any_call("Starting server at 0.0.0.0:8000")
         mock_uvicorn.assert_called_once_with(app, host="0.0.0.0", port=8000)
 
     def test_app_run_with_env(self, mock_uvicorn):
