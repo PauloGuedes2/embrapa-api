@@ -20,7 +20,7 @@ from infrastructure.docs.openapi_config import custom_openapi
 
 app = FastAPI(
     title="Embrapa API",
-    description="API para gerenciamento de dados de produção, processamento, comercialização, importação e exportação da  vitivinicultura.",
+    description="API para gerenciamento de dados de produção, processamento, comercialização, importação e exportação da vitivinicultura.",
     version="1.0.0"
 )
 
