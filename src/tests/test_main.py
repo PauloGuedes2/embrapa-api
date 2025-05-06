@@ -1,5 +1,6 @@
-from unittest.mock import patch, MagicMock
 import json
+from unittest.mock import patch, MagicMock
+
 import pytest
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -43,7 +44,7 @@ class TestMain:
 
     def test_app_run_default(self, mock_uvicorn, mock_logger):
         App().run()
-        mock_logger.assert_called_once_with("Starting server at 0.0.0.0:8000")
+        mock_logger.assert_any_call("Servidor iniciando em 0.0.0.0:8000")
         mock_uvicorn.assert_called_once_with(app, host="0.0.0.0", port=8000)
 
     def test_app_run_with_env(self, mock_uvicorn):
@@ -72,7 +73,7 @@ class TestMain:
         response = await app.exception_handlers[YearValidationError](request, exc)
         assert isinstance(response, JSONResponse)
         assert response.status_code == 400
-        assert json.loads(response.body) == {"message": "Ano inválido", "year": 1800}
+        assert json.loads(response.body) == {"mensagem": "Ano inválido", "ano": 1800}
 
     @pytest.mark.asyncio
     async def test_data_fetch_error_handler(self):
@@ -81,7 +82,7 @@ class TestMain:
         response = await app.exception_handlers[DataFetchError](request, exc)
         assert isinstance(response, JSONResponse)
         assert response.status_code == 500
-        assert json.loads(response.body) == {"message": "Erro ao buscar dados", "url": "http://fake-url"}
+        assert json.loads(response.body) == {"mensagem": "Erro ao buscar dados", "url": "http://fake-url"}
 
     @pytest.mark.asyncio
     async def test_not_found_error_handler(self):
@@ -90,4 +91,4 @@ class TestMain:
         response = await app.exception_handlers[NotFoundError](request, exc)
         assert isinstance(response, JSONResponse)
         assert response.status_code == 404
-        assert json.loads(response.body) == {"message": "Recurso não encontrado", "resource": "relatorio.csv"}
+        assert json.loads(response.body) == {"mensagem": "Recurso não encontrado", "recurso": "relatorio.csv"}

@@ -1,7 +1,9 @@
+from datetime import datetime, timezone, timedelta
 from typing import Optional, Callable, List, Any, Union
 
 from bs4 import BeautifulSoup
 
+from config.logger import logger
 from domain.enum.enums import ImportSubOption, ExportSubOption, ProcessingSubOption
 
 
@@ -16,7 +18,8 @@ class Utils:
 
         table = soup.find("table", {"class": table_class})
         if not table:
-            raise ValueError(f"Table with class '{table_class}' not found")
+            logger.error(f"Tabela não encontrada com a classe: {table_class}")
+            raise ValueError
 
         data = []
         for row in table.find_all("tr")[skip_rows:]:
@@ -39,11 +42,14 @@ class Utils:
 
         if sub_option:
             if "opcao=opt_05" in base_url and not isinstance(sub_option, ImportSubOption):
-                raise ValueError("Import URL requires ImportSubOption")
+                logger.error("Tipo de subopção inválida para URL de importação")
+                raise ValueError
             if "opcao=opt_06" in base_url and not isinstance(sub_option, ExportSubOption):
-                raise ValueError("Export URL requires ExportSubOption")
+                logger.error("Tipo de subopção inválida para URL de exportação")
+                raise ValueError
             if "opcao=opt_03" in base_url and not isinstance(sub_option, ProcessingSubOption):
-                raise ValueError("Processing URL requires ProcessingSubOption")
+                logger.error("Tipo de subopção inválida para URL de processamento")
+                raise ValueError
 
         params = []
         if year is not None:
@@ -55,3 +61,7 @@ class Utils:
             return base_url
 
         return f"{base_url}{'&' if '?' in base_url else '?'}{'&'.join(params)}"
+
+    @staticmethod
+    def get_current_utc_brasilia():
+        return datetime.now(timezone.utc) + timedelta(hours=-3)
