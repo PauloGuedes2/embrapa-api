@@ -39,7 +39,7 @@ async def year_validation_exception_handler(request: Request, exc: YearValidatio
     logger.error(f"Validação de ano falhou: {exc.message} | Ano: {exc.year}")
     return JSONResponse(
         status_code=400,
-        content={"mensagem": exc.message, "year": exc.year},
+        content={"mensagem": exc.message, "ano": exc.year},
     )
 
 
