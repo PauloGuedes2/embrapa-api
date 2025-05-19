@@ -22,6 +22,7 @@
 - [✅ Execução dos Testes](#-execução-dos-testes)
 - [⚙️ Integração Contínua (CI) com GitHub Actions](#️-integração-contínua-ci-com-github-actions)
 - [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [🖼️ Implementações Futuras](#-implementações-futuras)
 - [📜 Licença](#-licença)
 
 ---
