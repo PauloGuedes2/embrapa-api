@@ -1,17 +1,16 @@
-from abc import ABC, abstractmethod
-from typing import Optional
-
 import requests
+from typing import Optional
+from util.utils import Utils
 from bs4 import BeautifulSoup
-
 from config.logger import logger
-from domain.entities.commercialization_entity import CommercializationEntity
+from abc import ABC, abstractmethod
 from domain.entities.export_entity import ExportEntity
 from domain.entities.import_entity import ImportEntity
+from exceptions.custom_exceptions import DataFetchError
 from domain.entities.processing_entity import ProcessingEntity
 from domain.entities.production_entity import ProductionEntity
+from domain.entities.commercialization_entity import CommercializationEntity
 from domain.enum.enums import ExportSubOption, ImportSubOption, ProcessingSubOption
-from exceptions.custom_exceptions import DataFetchError
 
 
 class BaseScraper(ABC):
@@ -20,12 +19,20 @@ class BaseScraper(ABC):
 
     @staticmethod
     def fetch_data(url) -> BeautifulSoup:
-        response = requests.get(url)
-        if response.status_code != 200:
+        cache_file_name = Utils.get_cache_file_name(url)
+        cache = Utils.get_cache(cache_file_name)
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                with open(cache_file_name, 'w', encoding='utf-8') as file:
+                    file.write(response.text)
+                return BeautifulSoup(response.text, "html.parser")
             logger.error(f"Falha ao buscar dados. Status code: {response.status_code}, URL: {url}")
             raise DataFetchError(url)
-        return BeautifulSoup(response.text, "html.parser")
-
+        except Exception as e:
+            if cache:
+                return cache
+            raise e
 
 class ProductionScraperBase(BaseScraper):
     @abstractmethod

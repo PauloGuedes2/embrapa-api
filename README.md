@@ -22,6 +22,7 @@
 - [✅ Execução dos Testes](#-execução-dos-testes)
 - [⚙️ Integração Contínua (CI) com GitHub Actions](#️-integração-contínua-ci-com-github-actions)
 - [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [🖼️ Implementações Futuras](#-implementações-futuras)
 - [📜 Licença](#-licença)
 
 ---
@@ -220,5 +221,9 @@ Este projeto já está integrado com uma pipeline de CI utilizando GitHub Action
 - **Safety**
 
 ---
+
+### 🖼️Implementações Futuras
+![Arquitetura Futura.jpg](img/Arquitetura%20Futura.jpg)
+
 ## 📜 Licença
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
