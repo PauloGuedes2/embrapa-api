@@ -1,9 +1,8 @@
+from bs4 import BeautifulSoup
+from config.logger import logger
+from urllib.parse import urlparse, parse_qs
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Callable, List, Any, Union
-
-from bs4 import BeautifulSoup
-
-from config.logger import logger
 from domain.enum.enums import ImportSubOption, ExportSubOption, ProcessingSubOption
 
 
@@ -65,3 +64,19 @@ class Utils:
     @staticmethod
     def get_current_utc_brasilia():
         return datetime.now(timezone.utc) + timedelta(hours=-3)
+
+    @staticmethod
+    def get_cache(file):
+        try:
+            with open(file, 'r', encoding='utf-8') as arquivo:
+                return BeautifulSoup(arquivo.read(), "html.parser")
+        except FileNotFoundError:
+            return None
+
+    @staticmethod
+    def get_cache_file_name(url):
+        query_params = parse_qs(urlparse(url).query)
+        option = query_params.get('opcao', ['NA'])[0]
+        year = query_params.get('ano', ['NA'])[0]
+        suboption = query_params.get('subopcao', ['NA'])[0]
+        return f'cache/{option}_{year}_{suboption}.txt'
