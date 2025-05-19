@@ -220,5 +220,9 @@ Este projeto já está integrado com uma pipeline de CI utilizando GitHub Action
 - **Safety**
 
 ---
+
+### Implementações Futuras
+![Arquitetura Futura.jpg](img/Arquitetura%20Futura.jpg)
+
 ## 📜 Licença
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
