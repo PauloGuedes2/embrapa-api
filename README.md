@@ -221,7 +221,7 @@ Este projeto já está integrado com uma pipeline de CI utilizando GitHub Action
 
 ---
 
-### Implementações Futuras
+### 🖼️Implementações Futuras
 ![Arquitetura Futura.jpg](img/Arquitetura%20Futura.jpg)
 
 ## 📜 Licença
