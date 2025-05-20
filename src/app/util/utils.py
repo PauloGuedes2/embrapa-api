@@ -1,3 +1,4 @@
+import os
 from bs4 import BeautifulSoup
 from config.logger import logger
 from urllib.parse import urlparse, parse_qs
@@ -79,4 +80,6 @@ class Utils:
         option = query_params.get('opcao', ['NA'])[0]
         year = query_params.get('ano', ['NA'])[0]
         suboption = query_params.get('subopcao', ['NA'])[0]
-        return f'cache/{option}_{year}_{suboption}.txt'
+        base_dir = os.path.abspath(os.path.dirname(__file__))
+        cache_dir = os.path.abspath(os.path.join(base_dir, '..', 'cache'))
+        return os.path.join(cache_dir, f'{option}_{year}_{suboption}.txt')
