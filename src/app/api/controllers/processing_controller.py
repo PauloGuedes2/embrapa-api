@@ -14,7 +14,7 @@ router = APIRouter()
 
 class ProcessingController:
     @staticmethod
-    @router.get("/processamento/{ano}/{subopcao}")
+    @router.get("/processamento")
     def get_processing(
             year: Optional[int] = Query(None, description="Ano dos dados de processamento (1970 - 2024)"),
             sub_option: Optional[ProcessingSubOption] = Query(None, description="Subopção para a requisição"),

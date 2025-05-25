@@ -13,7 +13,7 @@ router = APIRouter()
 
 class ProductionController:
     @staticmethod
-    @router.get("/producao/{ano}")
+    @router.get("/producao")
     def get_production(
             year: Optional[int] = Query(None, description="Ano dos dados de produção (1970 - 2023)"),
             scraper: ProductionInterface = Depends(ScraperDependencies.get_production_scraper),

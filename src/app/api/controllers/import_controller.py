@@ -14,7 +14,7 @@ router = APIRouter()
 
 class ImportController:
     @staticmethod
-    @router.get("/importacao/{ano}/{subopcao}")
+    @router.get("/importacao")
     def get_import(
             year: Optional[int] = Query(None, description="Ano dos dados de importação (1970 - 2024)"),
             sub_option: Optional[ImportSubOption] = Query(None, description="Subopção para a requisição"),

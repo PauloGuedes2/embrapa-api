@@ -14,7 +14,7 @@ router = APIRouter()
 
 class ExportController:
     @staticmethod
-    @router.get("/exportacao/{ano}/{subopcao}")
+    @router.get("/exportacao")
     def get_export(
             year: Optional[int] = Query(None, description="Ano dos dados de exportação (1970 - 2024)"),
             sub_option: Optional[ExportSubOption] = Query(None, description="Subopção para a requisição"),

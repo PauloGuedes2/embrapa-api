@@ -13,7 +13,7 @@ router = APIRouter()
 
 class CommercializationController:
     @staticmethod
-    @router.get("/comercializacao/{ano}")
+    @router.get("/comercializacao")
     def get_commercialization(
             year: Optional[int] = Query(None, description="Ano dos dados de comercialização (1970 - 2023)"),
             scraper: CommercializationInterface = Depends(ScraperDependencies.get_commercialization_scraper),

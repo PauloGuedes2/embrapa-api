@@ -15,13 +15,13 @@
 ## 📌 Índice
 
 - [📝 Sobre o Projeto](#-sobre-o-projeto)
+- [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
 - [🧱 Arquitetura](#-arquitetura)
 - [🔐 Autenticação](#-autenticação)
 - [🔗 Rotas da API](#-rotas-da-api)
 - [🚀 Como Usar](#-como-usar)
 - [✅ Execução dos Testes](#-execução-dos-testes)
 - [⚙️ Integração Contínua (CI) com GitHub Actions](#️-integração-contínua-ci-com-github-actions)
-- [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
 - [🖼️ Implementações Futuras](#-implementações-futuras)
 - [📜 Licença](#-licença)
 
@@ -30,7 +30,7 @@
 ## 📝 Sobre o Projeto
 
 Este projeto expõe uma **API RESTful** para facilitar o acesso aos dados de vitivinicultura pública brasileira do site da [Embrapa Vitibrasil](http://vitibrasil.cnpuv.embrapa.br/).  
-Esses dados, originalmente disponíveis em páginas HTML com tabelas, são **extraídos via web scraping** e organizados para fácil consumo por sistemas e usuários técnicos.
+Esses dados, originalmente disponíveis em páginas HTML como tabelas, são **extraídos via web scraping** e organizados para fácil consumo por sistemas e usuários técnicos.
 
 Os dados disponíveis envolvem informações sobre:
 
@@ -42,9 +42,22 @@ Os dados disponíveis envolvem informações sobre:
 
 ---
 
+## 🛠 Tecnologias Utilizadas
+- **Python 3.11**
+- **FastAPI**
+- **BeautifulSoup4**
+- **Uvicorn**
+- **Pytest**
+- **GitHub Actions**
+- **Ruff**
+- **Bandit**
+- **Safety**
+
+---
+
 ## 🧱 Arquitetura
 
-A aplicação é baseada nos princípios da **Clean Architecture**, dividindo responsabilidades entre:
+A aplicação é baseada nos princípios da **Clean Architecture** (hexagonal), dividindo responsabilidades entre:
 
 
 ### 🗂️ Descrição Geral das Pastas
@@ -117,18 +130,43 @@ Todas as rotas de dados são protegidas e requerem autenticação JWT.
 
 ### 🔒 Rotas Protegidas (requerem autenticação)
 
-| Método | Endpoint                                                  | Descrição                           |
-|--------|-----------------------------------------------------------|-------------------------------------|
-| `GET`  | `/embrapa-vitivinicultura/producao/{ano}`                 | Retorna dados de produção           |
-| `GET`  | `/embrapa-vitivinicultura/processamento/{ano}/{subopcao}` | Retorna dados de processamento      |
-| `GET`  | `/embrapa-vitivinicultura/importacao/{ano}/{subopcao}`    | Retorna dados de importação         |
-| `GET`  | `/embrapa-vitivinicultura/exportacao/{ano}/{subopcao}`    | Retorna dados de exportação         |
-| `GET`  | `/embrapa-vitivinicultura/comercializacao/{ano}`          | Retorna dados de comercialização    |
+| Método | Endpoint                                            | Descrição                           |
+|--------|-----------------------------------------------------|-------------------------------------|
+| `GET`  | `/embrapa-vitivinicultura/producao`                 | Retorna dados de produção           |
+| `GET`  | `/embrapa-vitivinicultura/processamento`            | Retorna dados de processamento      |
+| `GET`  | `/embrapa-vitivinicultura/importacao`               | Retorna dados de importação         |
+| `GET`  | `/embrapa-vitivinicultura/exportacao`               | Retorna dados de exportação         |
+| `GET`  | `/embrapa-vitivinicultura/comercializacao`          | Retorna dados de comercialização    |
 
-### Subopções disponíveis:
-- **Processamento**: `subopt_01`, `subopt_02`, `subopt_03`, `subopt_04`
-- **Importação**: `subopt_01`, `subopt_02`, `subopt_03`, `subopt_04`, `subopt_05 `
-- **Exportação**: `subopt_01`, `subopt_02`, `subopt_03`, `subopt_04`
+### 🔎 Query Parameters
+
+As rotas de dados aceitam os seguintes parâmetros de consulta:
+
+| Parâmetro  | Obrigatório     | Descrição                                                                 |
+|------------|-----------------|---------------------------------------------------------------------------|
+| `ano`      | Sim             | Ano específico para filtrar os dados (ex: `?ano=2022`)                    |
+| `subopcao` | Depende da rota | Subopção específica para detalhamento dos dados (ex: `?subopcao=subopt_01`) |
+
+---
+
+### 📂 Subopções disponíveis por rota:
+
+| Rota                | Subopção    | Descrição                         |
+|---------------------|-------------|-----------------------------------|
+| **Processamento**   | `subopt_01` | Viníferas                         |
+|                     | `subopt_02` | Americanas e híbridas             |
+|                     | `subopt_03` | Uvas de mesa                      |
+|                     | `subopt_04` | Sem classificação                 |
+| **Importação**      | `subopt_01` | Vinhos de mesa                    |
+|                     | `subopt_02` | Espumantes                        |
+|                     | `subopt_03` | Uvas frescas                      |
+|                     | `subopt_04` | Uvas passas                       |
+|                     | `subopt_05` | Suco de uva                       |
+| **Exportação**      | `subopt_01` | Vinhos de mesa                    |
+|                     | `subopt_02` | Espumantes                        |
+|                     | `subopt_03` | Uvas frescas                      |
+|                     | `subopt_04` | Suco de uva                       |
+
 
 📘 Acesse a documentação interativa em:  
 [http://localhost:8000/docs](http://localhost:8000/docs)
@@ -208,19 +246,6 @@ Este projeto já está integrado com uma pipeline de CI utilizando GitHub Action
 ```yaml
 .github/workflows/python_ci.yml
 ```
----
-## 🛠 Tecnologias Utilizadas
-- **Python 3.11**
-- **FastAPI**
-- **BeautifulSoup4**
-- **Uvicorn**
-- **Pytest**
-- **GitHub Actions**
-- **Ruff**
-- **Bandit**
-- **Safety**
-
----
 
 ### 🖼️Implementações Futuras
 ![Arquitetura Futura.jpg](img/Arquitetura%20Futura.jpg)

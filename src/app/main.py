@@ -18,11 +18,7 @@ from exceptions.custom_exceptions import YearValidationError, DataFetchError, No
 from infrastructure.db.init_db import DatabaseInitializer
 from infrastructure.docs.openapi_config import custom_openapi
 
-app = FastAPI(
-    title="Embrapa API",
-    description="API para gerenciamento de dados de produção, processamento, comercialização, importação e exportação da vitivinicultura.",
-    version="1.0.0"
-)
+app = FastAPI()
 
 app.openapi = lambda: custom_openapi(app, token_url=f"{ROUTER_PREFIX}/auth/login")
 app.include_router(auth_router, prefix=ROUTER_PREFIX, tags=["Autenticação"])
