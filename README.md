@@ -17,12 +17,13 @@
 - [📝 Sobre o Projeto](#-sobre-o-projeto)
 - [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
 - [🧱 Arquitetura](#-arquitetura)
+- [🖼️ Diagramas](#-diagramas)
 - [🔐 Autenticação](#-autenticação)
 - [🔗 Rotas da API](#-rotas-da-api)
+- [🧠 Mecanismo de Cache (Fallback)](#-mecanismo-de-cache-fallback)
 - [🚀 Como Usar](#-como-usar)
 - [✅ Execução dos Testes](#-execução-dos-testes)
 - [⚙️ Integração Contínua (CI) com GitHub Actions](#️-integração-contínua-ci-com-github-actions)
-- [🖼️ Implementações Futuras](#-implementações-futuras)
 - [📜 Licença](#-licença)
 
 ---
@@ -81,6 +82,36 @@ A aplicação é baseada nos princípios da **Clean Architecture** (hexagonal), 
 | `requirements.txt`                | Lista de dependências da aplicação para instalação                          |
 | `pytest.ini`                      | Configurações globais para rodar o Pytest                                   |
 ---
+
+## 🖼️ Diagramas
+
+### Diagrama de sequência: AS-IS
+![sequence-as-is.png](img/sequence-as-is.png)
+
+### Descrição do Diagrama de sequência: AS-IS
+
+Fase 1: **Registro de Usuário**
+- O cliente registra um novo usuário. O sistema verifica duplicidade, hasheia a senha e cria o usuário no banco.
+
+Fase 2: **Autenticação**
+-  O cliente realiza login, a senha é validada e o sistema emite tokens JWT para acesso.
+
+Fase 3: **Acesso Protegido**
+-  O cliente acessa rota protegida enviando token JWT, que é validado para liberar acesso.
+
+Fase 4: **Processamento da Requisição**
+-  O controller encaminha a solicitação à camada de aplicação para execução da lógica.
+
+Fase 5: **Extração de Dados**
+-  O scraper obtém dados do site, usando cache quando possível, e converte em entidades estruturadas.
+
+Fase 6: **Resposta ao Cliente**
+-  Os dados extraídos são retornados ao cliente em formato JSON via API.
+
+
+### Desenho de arquitetura: TO-BE
+![arch-to-be.gif](img/arch-to-be.gif)
+
 
 ## 🔐 Autenticação
 
@@ -171,7 +202,32 @@ As rotas de dados aceitam os seguintes parâmetros de consulta:
 📘 Acesse a documentação interativa em:  
 [http://localhost:8000/docs](http://localhost:8000/docs)
 
---- 
+---
+
+### 🧠 Mecanismo de Cache (Fallback)
+
+Para garantir maior **resiliência** e **desempenho** durante a extração dos dados do site da Embrapa, a aplicação utiliza um mecanismo de **cache local com fallback automático**.
+
+### 🔁 Como Funciona:
+
+Ao fazer uma requisição de scraping para obter os dados:
+
+1. A aplicação primeiro **verifica se existe um cache local** correspondente à URL da requisição.
+2. Se **não houver cache**, ela realiza a **requisição HTTP normalmente** e **salva uma cópia do HTML** em disco.
+3. Caso ocorra qualquer erro durante a requisição (como timeout, indisponibilidade do site ou exceções de rede), o sistema tenta **utilizar o HTML previamente armazenado no cache** como **fallback**.
+4. Se nem a requisição nem o cache estiverem disponíveis, uma exceção personalizada (`DataFetchError`) é lançada.
+
+### ✅ Benefícios:
+
+- **Alta disponibilidade**, mesmo com instabilidades no site da Embrapa.
+- **Redução de latência** em execuções repetidas.
+- **Menor carga no site fonte** (Embrapa Vitibrasil), evitando bloqueios ou throttling.
+
+### 📁 Onde o cache é armazenado?
+
+Os arquivos HTML cacheados são salvos com nomes derivados da URL de origem, usando hashing ou sanitização de nome, dentro de uma pasta local (`/cache`).
+
+---
 
 ## 🚀 Como Usar
 
@@ -246,9 +302,6 @@ Este projeto já está integrado com uma pipeline de CI utilizando GitHub Action
 ```yaml
 .github/workflows/python_ci.yml
 ```
-
-### 🖼️Implementações Futuras
-![Arquitetura Futura.jpg](img/Arquitetura%20Futura.jpg)
 
 ## 📜 Licença
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
