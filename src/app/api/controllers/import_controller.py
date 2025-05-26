@@ -1,9 +1,10 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
 
 from api.dependencies.auth_dependencies import get_current_user
 from api.dependencies.scraper_dependencies import ScraperDependencies
+from api.docs.query_examples import QueryExamples
 from application.usecase.import_usercase import ImportUseCase
 from config.logger import logger
 from domain.enum.enums import ImportSubOption
@@ -14,10 +15,10 @@ router = APIRouter()
 
 class ImportController:
     @staticmethod
-    @router.get("/importacao/{ano}/{subopcao}")
+    @router.get("/importacao")
     def get_import(
-            year: Optional[int] = Query(None, description="Ano dos dados de importação (1970 - 2024)"),
-            sub_option: Optional[ImportSubOption] = Query(None, description="Subopção para a requisição"),
+            year: Optional[int] = QueryExamples.IMPORT_YEAR,
+            sub_option: Optional[ImportSubOption] = QueryExamples.IMPORT_SUBOPTION,
             scraper: ImportInterface = Depends(ScraperDependencies.get_import_scraper),
             username: str = Depends(get_current_user)
     ):

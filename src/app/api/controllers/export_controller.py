@@ -1,9 +1,10 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
 
 from api.dependencies.auth_dependencies import get_current_user
 from api.dependencies.scraper_dependencies import ScraperDependencies
+from api.docs.query_examples import QueryExamples
 from application.usecase.export_usercase import ExportUseCase
 from config.logger import logger
 from domain.enum.enums import ExportSubOption
@@ -14,10 +15,10 @@ router = APIRouter()
 
 class ExportController:
     @staticmethod
-    @router.get("/exportacao/{ano}/{subopcao}")
+    @router.get("/exportacao")
     def get_export(
-            year: Optional[int] = Query(None, description="Ano dos dados de exportação (1970 - 2024)"),
-            sub_option: Optional[ExportSubOption] = Query(None, description="Subopção para a requisição"),
+            year: Optional[int] = QueryExamples.EXPORT_YEAR,
+            sub_option: Optional[ExportSubOption] = QueryExamples.EXPORT_SUBOPTION,
             scraper: ExportInterface = Depends(ScraperDependencies.get_export_scraper),
             username: str = Depends(get_current_user)
     ):
