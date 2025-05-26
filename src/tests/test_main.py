@@ -28,11 +28,11 @@ class TestMain:
     def test_routers_registered(self):
         paths = {str(route.path) for route in app.routes}
         expected_paths = {
-            f"{ROUTER_PREFIX}/producao/{{ano}}",
-            f"{ROUTER_PREFIX}/processamento/{{ano}}/{{subopcao}}",
-            f"{ROUTER_PREFIX}/comercializacao/{{ano}}",
-            f"{ROUTER_PREFIX}/importacao/{{ano}}/{{subopcao}}",
-            f"{ROUTER_PREFIX}/exportacao/{{ano}}/{{subopcao}}"
+            f"{ROUTER_PREFIX}/producao",
+            f"{ROUTER_PREFIX}/processamento",
+            f"{ROUTER_PREFIX}/comercializacao",
+            f"{ROUTER_PREFIX}/importacao",
+            f"{ROUTER_PREFIX}/exportacao"
         }
         assert expected_paths.issubset(paths)
 
