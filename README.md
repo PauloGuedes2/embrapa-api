@@ -1,6 +1,6 @@
 <h1 align="center">🍇 Embrapa Data API</h1>
 <p align="center">
-  Uma API REST moderna e estruturada em <strong>Python 3.11 + FastAPI</strong> para expor dados públicos da vitivinicultura brasileira, com arquitetura limpa, testes automatizados e scraping de dados diretamente do site da <a href="http://vitibrasil.cnpuv.embrapa.br/">Embrapa</a>.
+  Uma API RESTful moderna e estruturada em <strong>Python 3.11 + FastAPI</strong> para expor dados públicos da vitivinicultura brasileira, com arquitetura limpa, testes automatizados e scraping de dados diretamente do site da <a href="http://vitibrasil.cnpuv.embrapa.br/">Embrapa</a>.
 </p>
 
 <p align="center">
@@ -21,9 +21,12 @@
 - [🔐 Autenticação](#-autenticação)
 - [🔗 Rotas da API](#-rotas-da-api)
 - [🧠 Mecanismo de Cache (Fallback)](#-mecanismo-de-cache-fallback)
+- [💾 Banco de Dados](#-banco-de-dados)
 - [🚀 Como Usar](#-como-usar)
 - [✅ Execução dos Testes](#-execução-dos-testes)
-- [⚙️ Integração Contínua (CI) com GitHub Actions](#️-integração-contínua-ci-com-github-actions)
+- [⚙️ Integração Contínua (CI) com GitHub Actions](#-integração-contínua-ci-com-github-actions)
+- [🏠 Repositorio do Github](#-repositorio-do-github)
+- [🎥 Vídeo Demonstração](#-vídeo-demonstração)
 - [📜 Licença](#-licença)
 
 ---
@@ -63,24 +66,30 @@ A aplicação é baseada nos princípios da **Clean Architecture** (hexagonal), 
 
 ### 🗂️ Descrição Geral das Pastas
 
-| 📁 Pasta                          | ✨ Descrição                                                                 |
-|-----------------------------------|-----------------------------------------------------------------------------|
-| `.github/`                        | Contém configurações de CI com GitHub Actions                               |
-| `src/app/`                        | Contém o `main.py`, responsável por inicializar o servidor FastAPI          |
-| `src/app/adapters/scraper`        | Responsável pela extração e scraping dos dados da Embrapa                   |
-| `src/app/api/controllers/`        | Define as rotas públicas que a API disponibiliza                            |
-| `src/app/application/usecase/`    | Lógica de negócio que consome os dados extraídos e prepara a resposta final |
-| `src/app/application/validators/` | Validações de entrada, como ano e parâmetros de navegação                   |
-| `src/app/config/params`           | Configurações e constantes                                                  |
-| `src/app/domain/entities`         | Contém as entidades                                                         |
-| `src/app/domain/enums`            | Contém os enums                                                             |
-| `src/app/domain/ports`            | Contém as interfaces                                                        |
-| `src/app/exceptions/`             | Exceções customizadas para padronizar erros retornados pela API             |
-| `src/app/infrastructure/db/`      | Configurações e modelos de banco de dados                                   |
-| `src/app/util/utils`              | Utilitários e formatadores utilizados em múltiplas partes do sistema        |
-| `src/tests/`                      | Testes unitários organizados por camada (com uso de mocks)                  |
-| `requirements.txt`                | Lista de dependências da aplicação para instalação                          |
-| `pytest.ini`                      | Configurações globais para rodar o Pytest                                   |
+| 📁 Pasta                         | ✨ Descrição                                                                   |
+|----------------------------------|-------------------------------------------------------------------------------|
+| `.github/`                       | Contém configurações de CI com GitHub Actions                                 |
+| `src/app/`                       | Contém o `main.py`, responsável por inicializar o servidor FastAPI            |
+| `src/app/adapter/scraper`        | Responsável pela extração e scraping dos dados da Embrapa                     |
+| `src/app/api/controllers/`       | Define as rotas públicas que a API disponibiliza                              |
+| `src/app/api/dependencies/`      | Define as dependências injetadas nas rotas da API                             |
+| `src/app/api/docs/`              | Exemplos de queries para a documentação Swagger                               |
+| `src/app/api/schemas/`           | Define os modelos de dados utilizados nas requisições e respostas da API      |
+| `src/app/application/service/`   | Contém serviços que implementam regras de negócio                             |
+| `src/app/application/usecase/`   | Lógica de negócio que consome os dados extraídos e prepara a resposta final   |
+| `src/app/application/validator/` | Validações de entrada, como ano e parâmetros de navegação                     |
+| `src/app/cache/`                 | Implementa o mecanismo de cache para fallback                                 |
+| `src/app/config/params`          | Configurações e constantes                                                    |
+| `src/app/domain/entities`        | Contém as entidades                                                           |
+| `src/app/domain/enums`           | Contém os enums                                                               |
+| `src/app/domain/ports`           | Contém as interfaces                                                          |
+| `src/app/exceptions/`            | Exceções customizadas para padronizar erros retornados pela API               |
+| `src/app/infrastructure/db/`     | Configurações e modelos de banco de dados                                     |
+| `src/app/infrastructure/docs/`   | Documentação adicional para a infraestrutura                                  |
+| `src/app/util/utils`             | Utilitários e formatadores utilizados em múltiplas partes do sistema          |
+| `src/tests/`                     | Testes unitários organizados por camada (com uso de mocks)                    |
+| `requirements.txt`               | Lista de dependências da aplicação para instalação                            |
+| `pytest.ini`                     | Configurações globais para rodar o Pytest                                     |
 ---
 
 ## 🖼️ Diagramas
@@ -229,6 +238,11 @@ Os arquivos HTML cacheados são salvos com nomes derivados da URL de origem, usa
 
 ---
 
+## 💾 Banco de Dados
+A aplicação utiliza um banco de dados SQLite para armazenar os dados extraídos. O banco é inicializado automaticamente ao iniciar a aplicação, criando as tabelas necessárias.
+
+---
+
 ## 🚀 Como Usar
 
 ### 1. Clonar o repositório
@@ -302,6 +316,21 @@ Este projeto já está integrado com uma pipeline de CI utilizando GitHub Action
 ```yaml
 .github/workflows/python_ci.yml
 ```
+
+---
+
+## 🏠 Repositorio do Github
+
+- **Link do repositório:** https://github.com/PauloGuedes2/embrapa-api
+
+---
+
+## 🎥 Vídeo Demonstração
+
+- **Confira o vídeo de demonstração do projeto no YouTube:** https://www.youtube.com/watch?v=97KAbD9-3PY&ab_channel=VitorBrand%C3%A3o
+- **Confira o vídeo de demonstração do projeto no Google Drive:** https://drive.google.com/file/d/1FcKSMmnAs7FTBTJb7MQiZ7X54aXUq9sv/view
+
+---
 
 ## 📜 Licença
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
