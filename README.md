@@ -26,6 +26,7 @@
 - [✅ Execução dos Testes](#-execução-dos-testes)
 - [⚙️ Integração Contínua (CI) com GitHub Actions](#-integração-contínua-ci-com-github-actions)
 - [🏠 Repositorio do Github](#-repositorio-do-github)
+- [☁️ Hospedagem da API](#-hospedagem-da-api)
 - [🎥 Vídeo Demonstração](#-vídeo-demonstração)
 - [📜 Licença](#-licença)
 
@@ -324,6 +325,13 @@ Este projeto já está integrado com uma pipeline de CI utilizando GitHub Action
 - **Link do repositório:** https://github.com/PauloGuedes2/embrapa-api
 
 ---
+
+## ☁️ Hospedagem da API
+A API está hospedada no Render, uma plataforma de nuvem que permite implantar aplicativos web facilmente. Você pode acessar a API através do seguinte link:
+
+- **Link da API (Swagger):** https://embrapa-api-1.onrender.com/docs
+- **Link da API (rota raiz):** https://embrapa-api-1.onrender.com/
+- **Link da API (health):** https://embrapa-api-1.onrender.com/health
 
 ## 🎥 Vídeo Demonstração
 
